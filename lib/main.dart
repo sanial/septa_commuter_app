@@ -29,7 +29,9 @@ import 'package:septa_commuter_app/models/train_view/train_view.dart';
 //   return parsed.map<TrainView>((json) => TrainView.fromJson(json)).toList();
 // }
 
-void main() => runApp(ProviderScope(child: const MyApp(),));
+void main() => runApp(ProviderScope(
+      child: const MyApp(),
+    ));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -52,7 +54,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final _trainview_data = ref.watch(userDataProvider);
+    final _trainview_data = ref.watch(trainviewsDataProvider);
     return Scaffold(
         appBar: AppBar(
           title: const Text('FetchTrainView'),
@@ -70,7 +72,7 @@ class HomePage extends ConsumerWidget {
                   child: ListView.builder(
                       itemCount: trainviewList.length,
                       itemBuilder: (context, index) {
-                        return Chip(label: Text(trainviewList[index].line!));
+                        return Chip(label: Text(trainviewList[index].trainno!));
                       }),
                 )
               ],
