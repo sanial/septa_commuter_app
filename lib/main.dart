@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:septa_commuter_app/dataprovider/data_provider.dart';
 import 'package:septa_commuter_app/models/train_schedule/train_schedule.dart';
 import 'package:septa_commuter_app/models/train_view/train_view.dart';
+import 'package:septa_commuter_app/train_line_filter.dart';
 
 //Fetch JSON document using http.get() method
 // Future<List<TrainView>> fetchTrainViews(http.Client client) async {
@@ -57,7 +58,8 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final _trainview_data = ref.watch(trainviewsDataProvider);
     final _trainsched_data = ref.watch(trainschedsDataProvider);
-
+    final _trainlines = ref.watch(trainlinefilterProvider);
+    //final _search = ref.watch(searchProvider).state;
     return Scaffold(
         appBar: AppBar(
           title: const Text('FetchTrainView'),
@@ -70,30 +72,51 @@ class HomePage extends ConsumerWidget {
                 )
                 .toList();
             return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Headline', style: TextStyle(fontSize: 18)),
-                  SizedBox(
-                    height: 200,
-                    width: MediaQuery.of(context).size.width,
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Consumer(builder: ((context, ref, child) {
+                    //   List<TrainLineFilter> _trainlines =
+                    //       ref.read(trainlineProvider);
+                    // })),
+                    Text('Line: ', style: TextStyle(fontSize: 18)),
+                    // TextFormField(
+                    //   onChanged: ((value) {
+                    //     _search.state = value;
+                    //   },),
+                    // ),
+                    SizedBox(
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                          physics: ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _trainlines.length,
+                          itemBuilder: (context, index) {
+                            return Chip(
+                              label: Text(_trainlines[index]),
+                            );
+                          }),
+                    ),
+                    SizedBox(
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                           physics: ClampingScrollPhysics(),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: trainviewList.length,
                           itemBuilder: (context, index) {
-                            return 
-                                Chip(
-                                  label: Text(trainviewList[index].line!),
-                              
+                            return Chip(
+                              label: Text(trainviewList[index].line!),
                             );
                           }),
-            ),
-                ],
-              ));
-        },
+                    ),
+                  ],
+                ));
+          },
           error: (error, stackTrace) => Text(error.toString()),
           loading: (() => const Center(
                 child: CircularProgressIndicator(),

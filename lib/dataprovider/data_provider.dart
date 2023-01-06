@@ -15,3 +15,12 @@ final trainschedsDataProvider = FutureProvider<List<TrainSchedule>>((ref) async 
   //reading the trainviewsProvider that we made and then getting the Train Views using its function
   return ref.watch(trainviewsProvider).getTrainScheds();
 });
+
+final searchProvider = StateProvider(((ref) => ' '));
+final trainlinefilterProvider = StateProvider<List<String>>(((ref) => listOfTrainLines));
+
+final listOfTrainLines = <String>[
+  'Cynwyd', 
+  'Media/Wawa', 
+  'Manayunk/Norristown', 
+  'Landsdale/Doylestown'];

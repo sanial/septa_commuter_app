@@ -34,9 +34,7 @@ class TrainViewApiService {
       throw Exception(response.reasonPhrase);
     }
   }
-  // if(p == 1){
 
-  // }
 }
 
 
