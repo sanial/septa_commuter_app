@@ -6,9 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:septa_commuter_app/dataprovider/data_provider.dart';
+import 'package:septa_commuter_app/models/train_schedule/train_schedule.dart';
 import 'package:septa_commuter_app/models/train_view/train_view.dart';
 
-// //Fetch JSON document using http.get() method
+//Fetch JSON document using http.get() method
 // Future<List<TrainView>> fetchTrainViews(http.Client client) async {
 //   final response =
 //       await client.get(Uri.parse('http://www3.septa.org/hackathon/TrainView/'));
@@ -55,6 +56,8 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _trainview_data = ref.watch(trainviewsDataProvider);
+    final _trainsched_data = ref.watch(trainschedsDataProvider);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('FetchTrainView'),
@@ -66,18 +69,31 @@ class HomePage extends ConsumerWidget {
                   (e) => e,
                 )
                 .toList();
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: trainviewList.length,
-                      itemBuilder: (context, index) {
-                        return Chip(label: Text(trainviewList[index].trainno!));
-                      }),
-                )
-              ],
-            );
-          },
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Headline', style: TextStyle(fontSize: 18)),
+                  SizedBox(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                          physics: ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: trainviewList.length,
+                          itemBuilder: (context, index) {
+                            return 
+                                Chip(
+                                  label: Text(trainviewList[index].line!),
+                              
+                            );
+                          }),
+            ),
+                ],
+              ));
+        },
           error: (error, stackTrace) => Text(error.toString()),
           loading: (() => const Center(
                 child: CircularProgressIndicator(),
