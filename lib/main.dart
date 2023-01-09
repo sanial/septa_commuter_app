@@ -6,8 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -63,9 +61,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   var _isStation = false;
   var _lines = ['Lansdale', 'Airport', 'Cynwyd'];
+  var _trainlinefilters = [];
 
   @override
   Widget build(BuildContext context) {
@@ -79,27 +77,47 @@ class _HomePageState extends State<HomePage> {
           children: [
             Consumer(builder: ((context, line, child) {
               final _trainlines = line.watch(trainlineProvider);
-              return ListView.builder(
-                itemCount: _trainlines.length,
-                itemBuilder: ((context, index) {
-                  final trainline = _trainlines[index];
-                  return FilterChip(
-                    label: Text(trainline.line),
-                    selected: trainline.isSelected, 
-                    onSelected: ((bool selected) {
-                      trainline.isSelected = !trainline.isSelected;
-                      
-                  })
-                    );
-                })
-                );
-
-
+              return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Line: ', style: TextStyle(fontSize: 18)),
+                      SizedBox(
+                        height: 100,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                            physics: ClampingScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _trainlines.length,
+                            itemBuilder: ((context, index) {
+                              final trainline = _trainlines[index];
+                              return FilterChip(
+                                  label: Text(trainline.line),
+                                  selected: trainline.isSelected,
+                                  selectedColor: Colors.yellow,
+                                  onSelected: ((bool selected) {
+                                    setState(() {
+                                      trainline.isSelected =
+                                          !trainline.isSelected;
+                                    });
+                                    if (trainline.isSelected) {
+                                      _trainlinefilters.add(trainline.line);
+                                      print(trainline.line);
+                                    } else {
+                                      _trainlinefilters.remove(trainline.line);
+                                      print(trainline.line);
+                                    }
+                                  }));
+                            })),
+                      ),
+                    ],
+                  ));
             })),
-
             Consumer(builder: ((context, ref, child) {
               final _trainview_data = ref.watch(trainviewsDataProvider);
-              //final _trainsched_data = ref.watch(trainschedsDataProvider);  
+              //final _trainsched_data = ref.watch(trainschedsDataProvider);
               //final _search = ref.watch(searchProvider);
               return _trainview_data.when(
                 data: (_trainview_data) {
@@ -123,7 +141,6 @@ class _HomePageState extends State<HomePage> {
                           //     _search.state = value;
                           //   },),
                           // ),
-                      
                           // SizedBox(
                           //   height: 100,
                           //   width: MediaQuery.of(context).size.width,
@@ -154,14 +171,18 @@ class _HomePageState extends State<HomePage> {
                                 itemCount: trainviewList.length,
                                 itemBuilder: (context, index) {
                                   return Chip(
-                                    label: Text(trainviewList[index].line!, style: TextStyle(color: Colors.blueAccent),),
+                                    label: Text(
+                                      trainviewList[index].line!,
+                                      style:
+                                          TextStyle(color: Colors.blueAccent),
+                                    ),
                                     shape: RoundedRectangleBorder(
-                                      side: BorderSide(color: Colors.blueAccent, width:1),
-                                        borderRadius: BorderRadius.circular(10), 
-                                      ),
+                                      side: BorderSide(
+                                          color: Colors.blueAccent, width: 1),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                     backgroundColor: Colors.white,
                                   );
-                                  
                                 }),
                           ),
                         ],
