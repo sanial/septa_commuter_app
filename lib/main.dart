@@ -1,6 +1,12 @@
+// ignore_for_file: prefer_const_constructors, unused_field, prefer_final_fields, unused_local_variable, no_leading_underscores_for_local_identifiers, non_constant_identifier_names
+
 import 'dart:convert';
 //import 'dart:html';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+
+
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +14,6 @@ import 'package:http/http.dart' as http;
 import 'package:septa_commuter_app/dataprovider/data_provider.dart';
 import 'package:septa_commuter_app/models/train_schedule/train_schedule.dart';
 import 'package:septa_commuter_app/models/train_view/train_view.dart';
-import 'package:septa_commuter_app/train_line_filter.dart';
 
 //Fetch JSON document using http.get() method
 // Future<List<TrainView>> fetchTrainViews(http.Client client) async {
@@ -35,12 +40,12 @@ void main() => runApp(ProviderScope(
       child: const MyApp(),
     ));
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return MaterialApp(
       title: 'Septa Commuter App',
       theme: ThemeData(
@@ -51,77 +56,139 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends ConsumerWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  var _isStation = false;
+  var _lines = ['Lansdale', 'Airport', 'Cynwyd'];
 
   @override
-  Widget build(BuildContext context, ref) {
-    final _trainview_data = ref.watch(trainviewsDataProvider);
-    final _trainsched_data = ref.watch(trainschedsDataProvider);
-    final _trainlines = ref.watch(trainlinefilterProvider);
-    //final _search = ref.watch(searchProvider).state;
+  Widget build(BuildContext context) {
+    var filterTrainLines = buildItemsbyFilter(_isStation);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('FetchTrainView'),
         ),
-        body: _trainview_data.when(
-          data: (_trainview_data) {
-            List<TrainView> trainviewList = _trainview_data
-                .map(
-                  (e) => e,
-                )
-                .toList();
-            return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Consumer(builder: ((context, ref, child) {
-                    //   List<TrainLineFilter> _trainlines =
-                    //       ref.read(trainlineProvider);
-                    // })),
-                    Text('Line: ', style: TextStyle(fontSize: 18)),
-                    // TextFormField(
-                    //   onChanged: ((value) {
-                    //     _search.state = value;
-                    //   },),
-                    // ),
-                    SizedBox(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _trainlines.length,
-                          itemBuilder: (context, index) {
-                            return Chip(
-                              label: Text(_trainlines[index]),
-                            );
-                          }),
-                    ),
-                    SizedBox(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: trainviewList.length,
-                          itemBuilder: (context, index) {
-                            return Chip(
-                              label: Text(trainviewList[index].line!),
-                            );
-                          }),
-                    ),
-                  ],
-                ));
-          },
-          error: (error, stackTrace) => Text(error.toString()),
-          loading: (() => const Center(
-                child: CircularProgressIndicator(),
-              )),
+        body: Column(
+          children: [
+            Consumer(builder: ((context, line, child) {
+              final _trainlines = line.watch(trainlineProvider);
+              return ListView.builder(
+                itemCount: _trainlines.length,
+                itemBuilder: ((context, index) {
+                  final trainline = _trainlines[index];
+                  return FilterChip(
+                    label: Text(trainline.line),
+                    selected: trainline.isSelected, 
+                    onSelected: ((bool selected) {
+                      trainline.isSelected = !trainline.isSelected;
+                      
+                  })
+                    );
+                })
+                );
+
+
+            })),
+
+            Consumer(builder: ((context, ref, child) {
+              final _trainview_data = ref.watch(trainviewsDataProvider);
+              //final _trainsched_data = ref.watch(trainschedsDataProvider);  
+              //final _search = ref.watch(searchProvider);
+              return _trainview_data.when(
+                data: (_trainview_data) {
+                  List<TrainView> trainviewList = _trainview_data
+                      .map(
+                        (e) => e,
+                      )
+                      .toList();
+                  return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Consumer(builder: ((context, ref, child) {
+                          //   List<TrainLineFilter> _trainlines =
+                          //       ref.read(trainlineProvider);
+                          // })),
+                          Text('Line: ', style: TextStyle(fontSize: 18)),
+                          // TextFormField(
+                          //   onChanged: ((value) {
+                          //     _search.state = value;
+                          //   },),
+                          // ),
+                      
+                          // SizedBox(
+                          //   height: 100,
+                          //   width: MediaQuery.of(context).size.width,
+                          //   child: ListView.builder(
+                          //       physics: ClampingScrollPhysics(),
+                          //       shrinkWrap: true,
+                          //       scrollDirection: Axis.horizontal,
+                          //       itemCount: _lines.length,
+                          //       itemBuilder: (context, index) {
+                          //         return FilterChip(
+                          //             selected: _isStation,
+                          //             selectedColor: Colors.yellow,
+                          //             label: Text(_lines[index]),
+                          //             onSelected: (selected) {
+                          //               setState(() {
+                          //                 _isStation = selected;
+                          //               });
+                          //             });
+                          //       }),
+                          // ),
+                          SizedBox(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView.builder(
+                                physics: ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: trainviewList.length,
+                                itemBuilder: (context, index) {
+                                  return Chip(
+                                    label: Text(trainviewList[index].line!, style: TextStyle(color: Colors.blueAccent),),
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(color: Colors.blueAccent, width:1),
+                                        borderRadius: BorderRadius.circular(10), 
+                                      ),
+                                    backgroundColor: Colors.white,
+                                  );
+                                  
+                                }),
+                          ),
+                        ],
+                      ));
+                },
+                error: (error, stackTrace) => Text(error.toString()),
+                loading: (() => const Center(
+                      child: CircularProgressIndicator(),
+                    )),
+              );
+            })),
+          ],
         ));
+  }
+
+  List<String> buildItemsbyFilter(bool isStation) {
+    if (isStation) {
+      return _lines.where((station) {
+        return station == 'Lansdale';
+      }).map((station) {
+        return "$station";
+      }).toList();
+    } else {
+      return _lines.map((station) {
+        return "$station";
+      }).toList();
+    }
   }
   //State<HomePage> createState() => _HomePageState();
 }
