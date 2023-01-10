@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:septa_commuter_app/dataprovider/data_provider.dart';
 import 'package:septa_commuter_app/models/train_schedule/train_schedule.dart';
 import 'package:septa_commuter_app/models/train_view/train_view.dart';
+import 'package:septa_commuter_app/services/services.dart';
 
 //Fetch JSON document using http.get() method
 // Future<List<TrainView>> fetchTrainViews(http.Client client) async {
@@ -68,23 +69,28 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var filterTrainLines = buildItemsbyFilter(_isStation);
-
+    final _selectedfilterchip = [];
     return Scaffold(
         appBar: AppBar(
           title: const Text('FetchTrainView'),
         ),
         body: Column(
           children: [
+            //**TrainLine Filter */
             Consumer(builder: ((context, line, child) {
               final _trainlines = line.watch(trainlineProvider);
+
               return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    //mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Line: ', style: TextStyle(fontSize: 18)),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text('Select Line: '),
+                      ),
                       SizedBox(
-                        height: 100,
+                        height: 30,
                         width: MediaQuery.of(context).size.width,
                         child: ListView.builder(
                             physics: ClampingScrollPhysics(),
@@ -94,6 +100,7 @@ class _HomePageState extends State<HomePage> {
                             itemBuilder: ((context, index) {
                               final trainline = _trainlines[index];
                               return FilterChip(
+                                  backgroundColor: Colors.amber,
                                   label: Text(trainline.line),
                                   selected: trainline.isSelected,
                                   selectedColor: Colors.yellow,
@@ -104,7 +111,6 @@ class _HomePageState extends State<HomePage> {
                                     });
                                     if (trainline.isSelected) {
                                       _trainlinefilters.add(trainline.line);
-                                      print(trainline.line);
                                     } else {
                                       _trainlinefilters.remove(trainline.line);
                                       print(trainline.line);
@@ -115,87 +121,101 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ));
             })),
+            //**TrainView Data */
             Consumer(builder: ((context, ref, child) {
               final _trainview_data = ref.watch(trainviewsDataProvider);
+
               //final _trainsched_data = ref.watch(trainschedsDataProvider);
               //final _search = ref.watch(searchProvider);
-              return _trainview_data.when(
-                data: (_trainview_data) {
-                  List<TrainView> trainviewList = _trainview_data
-                      .map(
-                        (e) => e,
-                      )
-                      .toList();
-                  return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Consumer(builder: ((context, ref, child) {
-                          //   List<TrainLineFilter> _trainlines =
-                          //       ref.read(trainlineProvider);
-                          // })),
-                          Text('Line: ', style: TextStyle(fontSize: 18)),
-                          // TextFormField(
-                          //   onChanged: ((value) {
-                          //     _search.state = value;
-                          //   },),
-                          // ),
-                          // SizedBox(
-                          //   height: 100,
-                          //   width: MediaQuery.of(context).size.width,
-                          //   child: ListView.builder(
-                          //       physics: ClampingScrollPhysics(),
-                          //       shrinkWrap: true,
-                          //       scrollDirection: Axis.horizontal,
-                          //       itemCount: _lines.length,
-                          //       itemBuilder: (context, index) {
-                          //         return FilterChip(
-                          //             selected: _isStation,
-                          //             selectedColor: Colors.yellow,
-                          //             label: Text(_lines[index]),
-                          //             onSelected: (selected) {
-                          //               setState(() {
-                          //                 _isStation = selected;
-                          //               });
-                          //             });
-                          //       }),
-                          // ),
-                          SizedBox(
-                            height: 100,
-                            width: MediaQuery.of(context).size.width,
-                            child: ListView.builder(
-                                physics: ClampingScrollPhysics(),
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: trainviewList.length,
-                                itemBuilder: (context, index) {
-                                  return Chip(
-                                    label: Text(
-                                      trainviewList[index].line!,
-                                      style:
-                                          TextStyle(color: Colors.blueAccent),
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.blueAccent, width: 1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                  );
-                                }),
-                          ),
-                        ],
-                      ));
-                },
-                error: (error, stackTrace) => Text(error.toString()),
-                loading: (() => const Center(
-                      child: CircularProgressIndicator(),
-                    )),
+              return RefreshIndicator(
+                onRefresh: () async {
+                  ref.refresh(trainviewsDataProvider.future);
+                  await ref.read(trainviewsDataProvider);
+                }, //TODO FIX not working
+                child: _trainview_data.when(
+                  data: (_trainview_data) {
+                    //ListofTrainviewslive
+                    List<TrainView> trainviewList = _trainview_data
+                        .map(
+                          (e) => e,
+                        )
+                        .toList();
+                    return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Consumer(builder: ((context, ref, child) {
+                            //   List<TrainLineFilter> _trainlines =
+                            //       ref.read(trainlineProvider);
+                            // })),
+                            // TextFormField(
+                            //   onChanged: ((value) {
+                            //     _search.state = value;
+                            //   },),
+                            // ),
+
+                            SizedBox(
+                              height: 100,
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                  physics: ClampingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: trainviewList.length,
+                                  itemBuilder: (context, index) {
+                                    return Row(
+                                      children: [
+                                        Stack(children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(30.0),
+                                            
+                                            child: Container(
+                                              width: 20,
+                                              height: 100,
+                                              color: Colors.red,
+                                              
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.all(3.0),
+                                            padding: const EdgeInsets.all(3.0),
+                                            decoration: trainlineBox(),
+                                            child: Text(
+                                              trainviewList[index].line!,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ]),
+                                      ],
+                                    );
+                                  }),
+                            ),
+                          ],
+                        ));
+                  },
+                  error: (error, stackTrace) => Text(error.toString()),
+                  loading: (() => const Center(
+                        child: CircularProgressIndicator(),
+                      )),
+                ),
               );
             })),
           ],
         ));
+  }
+
+  BoxDecoration trainlineBox() {
+    return BoxDecoration(
+      color: Colors.grey,
+      border: Border.all(color: Colors.black12, width: 2.0),
+      borderRadius: BorderRadius.all(
+          Radius.circular(30.0) //                 <--- border radius here
+          ),
+    );
   }
 
   List<String> buildItemsbyFilter(bool isStation) {
