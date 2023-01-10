@@ -73,6 +73,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('FetchTrainView'),
+          backgroundColor: Colors.white,
         ),
         body: Column(
           children: [
@@ -121,6 +122,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ));
             })),
+            SizedBox(height: 10,),
             //**TrainView Data */
             Consumer(builder: ((context, ref, child) {
               final _trainview_data = ref.watch(trainviewsDataProvider);
@@ -156,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                             // ),
 
                             SizedBox(
-                              height: 100,
+                              height: 500,
                               width: MediaQuery.of(context).size.width,
                               child: ListView.builder(
                                   physics: ClampingScrollPhysics(),
@@ -164,32 +166,75 @@ class _HomePageState extends State<HomePage> {
                                   scrollDirection: Axis.horizontal,
                                   itemCount: trainviewList.length,
                                   itemBuilder: (context, index) {
+                                    //Row of BorderLineBox stacks
                                     return Row(
                                       children: [
-                                        Stack(children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(30.0),
-                                            
-                                            child: Container(
-                                              width: 20,
-                                              height: 100,
-                                              color: Colors.red,
-                                              
-                                            ),
-                                          ),
+                                        Stack(
+                                          alignment: AlignmentDirectional.topCenter,
+                                          children: [
+                                          
+                                          //BorderLineBox
                                           Container(
-                                            margin: const EdgeInsets.all(3.0),
-                                            padding: const EdgeInsets.all(3.0),
-                                            decoration: trainlineBox(),
-                                            child: Text(
-                                              trainviewList[index].line!,
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
+                                            width: 135,
+                                            height: 400,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey,
+                                                  width: 1.0),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(
+                                                      20) //                 <--- border radius here
+                                                  ),
                                             ),
+
+                                            // decoration: ShapeDecoration(
+
+                                            //   shape: RoundedRectangleBorder(
+                                            //     borderRadius: BorderRadius.all(Radius.circular(5))
+                                            //   )),
+                                          ),
+                                          // ClipRRect(
+                                          //   borderRadius:
+                                          //       BorderRadius.circular(30.0),
+                                          //   child: Container(
+                                          //     width: 20,
+                                          //     height: 100,
+                                          //     color: Colors.red,
+                                          //   ),
+                                          // ),
+                                          //Concentric Circles
+                                          Container(
+                                                height: 20,
+                                                width: 20,
+                                                decoration: ShapeDecoration(
+                                                  shape: CircleBorder(),
+                                                  color: Colors.grey,
+                                                  // other arguments
+                                                ),
+                                              ),
+                                          //TrainLines Text
+                                          Column(
+                                            children: [
+                                          
+                                              SizedBox(height: 15,),
+                                              Container( 
+                                                margin: const EdgeInsets.all(3.0),
+                                                padding: const EdgeInsets.all(3.0),
+                                                decoration: trainlineBox(),
+                                                child: Text(
+                                                  trainviewList[index].line!,
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Color.fromARGB(255, 7, 103, 206),
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ]),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
                                       ],
                                     );
                                   }),
@@ -210,11 +255,17 @@ class _HomePageState extends State<HomePage> {
 
   BoxDecoration trainlineBox() {
     return BoxDecoration(
-      color: Colors.grey,
-      border: Border.all(color: Colors.black12, width: 2.0),
+      color: Colors.white,
+      border: Border.all(
+        color: Color.fromARGB(255, 7, 103, 206), 
+        width: 1.0,
+        style: BorderStyle.solid,
+        strokeAlign: StrokeAlign.center,
+        ),
       borderRadius: BorderRadius.all(
           Radius.circular(30.0) //                 <--- border radius here
           ),
+      
     );
   }
 
