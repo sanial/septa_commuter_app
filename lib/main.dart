@@ -173,6 +173,9 @@ class _HomePageState extends State<HomePage> {
                                     //Row of BorderLineBox stacks
                                     return Row(
                                       children: [
+                                        SizedBox(
+                                          width: 5,
+                                        ),
                                         Column(
                                           children: [
                                             SizedBox(height: 20,),
@@ -220,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                                                   //   ),
                                                   // ),
                                                   
-                                                  //TrainLines Text
+                                                  //TrainLine Text
                                                   Column(
                                                     children: [
                                                   
@@ -244,9 +247,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           ],
                                         ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
+                                        
                                       ],
                                     );
                                   }),
