@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.all(10),
-                        child: Text('Select Line: '),
+                        child: Text('LINE: '),
                       ),
                       SizedBox(
                         height: 30,
@@ -101,10 +101,12 @@ class _HomePageState extends State<HomePage> {
                             itemBuilder: ((context, index) {
                               final trainline = _trainlines[index];
                               return FilterChip(
-                                  backgroundColor: Colors.amber,
-                                  label: Text(trainline.line),
+                                  //side: BorderSide(color: Color.fromARGB(255, 7, 103, 206)),
+                                  backgroundColor: Color.fromARGB(255, 7, 103, 206),
+                                  label: Text(trainline.line, style: TextStyle(color: Colors.white),),
                                   selected: trainline.isSelected,
-                                  selectedColor: Colors.yellow,
+                                  selectedColor: Color.fromARGB(255, 67, 66, 66),
+                                  checkmarkColor: Colors.white,
                                   onSelected: ((bool selected) {
                                     setState(() {
                                       trainline.isSelected =
@@ -169,69 +171,77 @@ class _HomePageState extends State<HomePage> {
                                     //Row of BorderLineBox stacks
                                     return Row(
                                       children: [
-                                        Stack(
-                                          alignment: AlignmentDirectional.topCenter,
+                                        Column(
                                           children: [
-                                          
-                                          //BorderLineBox
-                                          Container(
-                                            width: 135,
-                                            height: 400,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 1.0),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(
-                                                      20) //                 <--- border radius here
+                                            SizedBox(height: 20,),
+                                            //Nested Stacks
+                                            Stack(
+                                              alignment: AlignmentDirectional.topCenter,
+                                              children: [
+                                                //Concentric Circles
+                                                  Container(
+                                                        height: 20,
+                                                        width: 20,
+                                                        decoration: ShapeDecoration(
+                                                          shape: CircleBorder(),
+                                                          color: Colors.grey,
+                                                          // other arguments
+                                                        ),
+                                                      ),
+
+                                                //BorderLineBox stacks
+                                                Stack(
+                                                  alignment: AlignmentDirectional.topCenter,
+                                                  children: [
+                                                  
+                                                  //BorderLineBox
+                                                  Container(
+                                                    width: 135,
+                                                    height: 459,
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 1.0),
+                                                      borderRadius: BorderRadius.all(
+                                                          Radius.circular(
+                                                              20) //                 <--- border radius here
+                                                          ),
+                                                    ),
                                                   ),
+                                                  // ClipRRect(
+                                                  //   borderRadius:
+                                                  //       BorderRadius.circular(30.0),
+                                                  //   child: Container(
+                                                  //     width: 20,
+                                                  //     height: 100,
+                                                  //     color: Colors.red,
+                                                  //   ),
+                                                  // ),
+                                                  
+                                                  //TrainLines Text
+                                                  Column(
+                                                    children: [
+                                                  
+                                                      SizedBox(height: 15,),
+                                                      Container( 
+                                                        margin: const EdgeInsets.all(3.0),
+                                                        padding: const EdgeInsets.all(3.0),
+                                                        decoration: trainlineBox(),
+                                                        child: Text(
+                                                          trainviewList[index].line!,
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: Color.fromARGB(255, 7, 103, 206),
+                                                              fontWeight: FontWeight.bold),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ]),
+                                              ],
                                             ),
-
-                                            // decoration: ShapeDecoration(
-
-                                            //   shape: RoundedRectangleBorder(
-                                            //     borderRadius: BorderRadius.all(Radius.circular(5))
-                                            //   )),
-                                          ),
-                                          // ClipRRect(
-                                          //   borderRadius:
-                                          //       BorderRadius.circular(30.0),
-                                          //   child: Container(
-                                          //     width: 20,
-                                          //     height: 100,
-                                          //     color: Colors.red,
-                                          //   ),
-                                          // ),
-                                          //Concentric Circles
-                                          Container(
-                                                height: 20,
-                                                width: 20,
-                                                decoration: ShapeDecoration(
-                                                  shape: CircleBorder(),
-                                                  color: Colors.grey,
-                                                  // other arguments
-                                                ),
-                                              ),
-                                          //TrainLines Text
-                                          Column(
-                                            children: [
-                                          
-                                              SizedBox(height: 15,),
-                                              Container( 
-                                                margin: const EdgeInsets.all(3.0),
-                                                padding: const EdgeInsets.all(3.0),
-                                                decoration: trainlineBox(),
-                                                child: Text(
-                                                  trainviewList[index].line!,
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Color.fromARGB(255, 7, 103, 206),
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ]),
+                                          ],
+                                        ),
                                         SizedBox(
                                           width: 5,
                                         ),
