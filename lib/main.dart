@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text('LINE: '),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 35,
                         width: MediaQuery.of(context).size.width,
                         child: ListView.builder(
                             physics: ClampingScrollPhysics(),
@@ -101,12 +101,14 @@ class _HomePageState extends State<HomePage> {
                             itemBuilder: ((context, index) {
                               final trainline = _trainlines[index];
                               return FilterChip(
-                                  //side: BorderSide(color: Color.fromARGB(255, 7, 103, 206)),
+                                  side: BorderSide(color: Color.fromARGB(255, 7, 103, 206),strokeAlign: StrokeAlign.center),
+                                  padding: EdgeInsets.all(8),
                                   backgroundColor: Color.fromARGB(255, 7, 103, 206),
-                                  label: Text(trainline.line, style: TextStyle(color: Colors.white),),
+                                  label: Text(trainline.line, style: TextStyle(color: trainline.isSelected ? Color.fromARGB(255, 7, 103, 206): Colors.white),),
                                   selected: trainline.isSelected,
-                                  selectedColor: Color.fromARGB(255, 67, 66, 66),
-                                  checkmarkColor: Colors.white,
+                                  selectedColor: Colors.white,
+                                  //Color.fromARGB(255, 67, 66, 66),
+                                  checkmarkColor: Color.fromARGB(255, 7, 103, 206),
                                   onSelected: ((bool selected) {
                                     setState(() {
                                       trainline.isSelected =
