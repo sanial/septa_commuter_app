@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,16 +27,27 @@ final searchProvider = StateProvider(((ref) => ' '));
 
 //**Filters*/
 
-class TrainLine {
+class TrainLine extends LinkedListEntry<TrainLine> {
   TrainLine({required this.line, required this.isSelected});
 
   final String line;
   bool isSelected;
 
-  // TrainLine.initial()
-  //   :line = 'Lansdale', isSelected = false;
+  Set hashSet = HashSet();
 
+  //final trainlineLinkedList = LinkedList<TrainLine>();
+  // Queue _trainlines_queue =
+  //                   Queue.from(_listOfTrainLines);
+
+  // ignore: unused_field
+
+  addtofront() {
+    
+
+  }
 }
+
+
 
 final _listOfTrainLines = [
   TrainLine(line: 'Airport', isSelected: false),
@@ -57,6 +70,9 @@ final trainlineProvider = Provider<List<TrainLine>>((ref) {
   return _listOfTrainLines;
 });
 
+// final trainlineSelectedProvider = StateProvider<List<TrainLine>>(((ref) {
+//   return [];
+// })
 
 // class TrainlineNotifier extends StateNotifier<List<TrainLine>>{
 //   TrainlineNotifier(): super([]);
