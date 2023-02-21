@@ -76,8 +76,7 @@ class _HomePageState extends State<HomePage> {
           title: const Text('SEPTA Commuter App - Regional Rail'),
           backgroundColor: Colors.white,
         ),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+        drawer: Drawer(
           child: Column(
             children: [
               //**TrainLine Filter**/
@@ -97,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Padding(
                               padding: EdgeInsets.all(10),
-                              child: Text('LINE: '),
+                              child: Text('I AM TAKING RAIL LINE: '),
                             ),
                             //Trainlines List
                             SizedBox(
@@ -177,6 +176,12 @@ class _HomePageState extends State<HomePage> {
                   ],
                 );
               })),
+          
+          ])),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
               SizedBox(
                 height: 10,
               ),
@@ -189,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                 return RefreshIndicator(
                   onRefresh: () async {
                     ref.refresh(trainviewsDataProvider.future);
-                    await ref.read(trainviewsDataProvider);
+                    //await ref.read(trainviewsDataProvider);
                   }, //TODO FIX not working
                   child: _trainview_data.when(
                     data: (_trainview_data) {
@@ -214,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                               //   },),
                               // ),
 
-                              SizedBox( //test edit
+                              SizedBox( 
                                 height: 500,
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView.builder(
@@ -245,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                                                     width: 20,
                                                     decoration: ShapeDecoration(
                                                       shape: CircleBorder(),
-                                                      color: Colors.grey,
+                                                      color: Color.fromARGB(255, 72, 72, 72),
                                                     ),
                                                   ),
 
@@ -263,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                                                               BoxDecoration(
                                                             border: Border.all(
                                                                 color:
-                                                                    Colors.grey,
+                                                                    Color.fromARGB(255, 72, 72, 72),
                                                                 width: 1.0),
                                                             borderRadius:
                                                                 BorderRadius.all(
