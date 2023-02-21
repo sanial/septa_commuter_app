@@ -2,6 +2,7 @@
 
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:ui';
 //import 'dart:html';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -72,112 +73,135 @@ class _HomePageState extends State<HomePage> {
     var filterTrainLines = buildItemsbyFilter(_isStation);
     final _selectedfilterchip = [];
     return Scaffold(
+        backgroundColor: backgroundColor,
         appBar: AppBar(
-          title: const Text('SEPTA Commuter App - Regional Rail'),
-          backgroundColor: Colors.white,
+          toolbarHeight: 45,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+              'SEPTA Regional Rail',
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Raleway',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          
+          backgroundColor: backgroundColor,
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.menu_rounded),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              );
+            },
+          ),
         ),
         drawer: Drawer(
-          child: Column(
-            children: [
-              //**TrainLine Filter**/
-              Consumer(builder: ((context, line, child) {
-                final _trainlines = line.watch(trainlineProvider);
-                // final _trainlines_selected = LinkedList<TrainLine>();
-                //final Queue _trainlines_queue = Queue.from(_trainlines);
+            child: Column(children: [
+          //**TrainLine Filter**/
+          Consumer(builder: ((context, line, child) {
+            final _trainlines = line.watch(trainlineProvider);
+            // final _trainlines_selected = LinkedList<TrainLine>();
+            //final Queue _trainlines_queue = Queue.from(_trainlines);
 
-                //Horizontal trainline FilterChip scroll
-                return Column(
-                  children: [
-                    //Trainlines Scroll
-                    SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          //mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text('I AM TAKING RAIL LINE: '),
-                            ),
-                            //Trainlines List
-                            SizedBox(
-                              height: 35,
-                              width: MediaQuery.of(context).size.width,
-                              child: ListView.builder(
-                                  physics: ClampingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: _trainlines.length,
-                                  itemBuilder: ((context, index) {
-                                    //Each trainline
-                                    final trainline =
-                                        _trainlines[index];
-                                    //     _trainlines_queue.elementAt(index);
-                                    return Row(
-                                      children: [
-                                        FilterChip(
-                                            side: BorderSide(
-                                                color: Color.fromARGB(
-                                                    255, 7, 103, 206),
-                                                strokeAlign:
-                                                    StrokeAlign.center),
-                                            padding: EdgeInsets.all(8),
-                                            backgroundColor: Color.fromARGB(
-                                                255, 7, 103, 206),
-                                            label: Text(
-                                              trainline.line,
-                                              style: TextStyle(
-                                                  color: trainline.isSelected
-                                                      ? Color.fromARGB(
-                                                          255, 7, 103, 206)
-                                                      : Colors.white),
-                                            ),
-                                            selected: trainline.isSelected,
-                                            selectedColor: Colors.white,
-                                            //Color.fromARGB(255, 67, 66, 66), really pretty darkgrey
-                                            checkmarkColor: Color.fromARGB(
-                                                255, 7, 103, 206),
-                                            onSelected: ((bool selected) {
-                                              setState(() {
-                                                trainline.isSelected =
-                                                    !trainline.isSelected;
-                                              
-                                              // if (trainline.isSelected) {
-                                              //   //line.read(trainlineSelectedProvider.notifier).state;
-                                              //   // _trainlinefilters
-                                              //   //     .add(trainline.line);
-                                              //   //_trainlines_queue.removeFirst();
-                                              //   _trainlines
-                                              //       .remove(trainline);
-                                              //   _trainlines
-                                              //       .add(trainline);
-                                              //   print(_trainlines);
+            //Horizontal trainline FilterChip scroll
+            return Column(
+              children: [
+                //Trainlines Scroll
+                SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      //mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text('I AM TAKING RAIL LINE: '),
+                        ),
+                        //Trainlines List
+                        SizedBox(
+                          height: 35,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                              physics: ClampingScrollPhysics(),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _trainlines.length,
+                              itemBuilder: ((context, index) {
+                                //Each trainline
+                                final trainline = _trainlines[index];
+                                //     _trainlines_queue.elementAt(index);
+                                return Row(
+                                  children: [
+                                    FilterChip(
+                                        side: BorderSide(
+                                            color: trainlineBoxColor,
+                                            strokeAlign: StrokeAlign.center),
+                                        padding: EdgeInsets.all(8),
+                                        backgroundColor: trainlineBoxColor,
+                                        label: Text(
+                                          trainline.line,
+                                          style: TextStyle(
+                                              color: trainline.isSelected
+                                                  ? trainlineBoxColor
+                                                  : Colors.white),
+                                        ),
+                                        selected: trainline.isSelected,
+                                        selectedColor: Colors.white,
+                                        //Color.fromARGB(255, 67, 66, 66), really pretty darkgrey
+                                        checkmarkColor: trainlineBoxColor,
+                                        onSelected: ((bool selected) {
+                                          setState(() {
+                                            trainline.isSelected =
+                                                !trainline.isSelected;
 
-                                              //   // _trainlines_queue.addFirst(
-                                              //   //     _trainlines_queue
-                                              //   //         .elementAt(index));
-                                              //   print(trainline.line);
-                                              //   //_trainlines_queue.remove(trainline);
-                                              // } else {
-                                              //   //_trainlinefilters.remove(trainline.line);
+                                            // if (trainline.isSelected) {
+                                            //   //line.read(trainlineSelectedProvider.notifier).state;
+                                            //   // _trainlinefilters
+                                            //   //     .add(trainline.line);
+                                            //   //_trainlines_queue.removeFirst();
+                                            //   _trainlines
+                                            //       .remove(trainline);
+                                            //   _trainlines
+                                            //       .add(trainline);
+                                            //   print(_trainlines);
 
-                                              // }
+                                            //   // _trainlines_queue.addFirst(
+                                            //   //     _trainlines_queue
+                                            //   //         .elementAt(index));
+                                            //   print(trainline.line);
+                                            //   //_trainlines_queue.remove(trainline);
+                                            // } else {
+                                            //   //_trainlinefilters.remove(trainline.line);
 
-                                              });
-                                            })),
-                                      ],
-                                    );
-                                  })),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                          ],
-                        )),
-                  ],
-                );
-              })),
-          
-          ])),
+                                            // }
+                                          });
+                                        })),
+                                  ],
+                                );
+                              })),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                      ],
+                    )),
+              ],
+            );
+          })),
+        ])),
+        bottomNavigationBar: SizedBox(
+          height: 55,
+          child: BottomAppBar(
+            color: Colors.white,
+            elevation: 0,
+            child: Icon(Icons.home_rounded, color: borderLineBox,),
+            
+  ),
+        ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
@@ -219,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                               //   },),
                               // ),
 
-                              SizedBox( 
+                              SizedBox(
                                 height: 500,
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView.builder(
@@ -250,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                                                     width: 20,
                                                     decoration: ShapeDecoration(
                                                       shape: CircleBorder(),
-                                                      color: Color.fromARGB(255, 72, 72, 72),
+                                                      color: borderLineBox,
                                                     ),
                                                   ),
 
@@ -267,13 +291,12 @@ class _HomePageState extends State<HomePage> {
                                                           decoration:
                                                               BoxDecoration(
                                                             border: Border.all(
-                                                                color:
-                                                                    Color.fromARGB(255, 72, 72, 72),
+                                                                color: borderLineBox,
                                                                 width: 1.0),
                                                             borderRadius:
                                                                 BorderRadius.all(
                                                                     Radius.circular(
-                                                                        20) //                 <--- border radius here
+                                                                        30) //                 <--- border radius here
                                                                     ),
                                                           ),
                                                         ),
@@ -309,12 +332,8 @@ class _HomePageState extends State<HomePage> {
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         12,
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            7,
-                                                                            103,
-                                                                            206),
+                                                                    color:
+                                                                        trainlineBoxColor,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold),
@@ -346,12 +365,16 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
+  static const trainlineBoxColor = Color(0xFF3897F1);
+  static const backgroundColor = Color(0xFFF1F1F1);
+  static const borderLineBox = Color.fromARGB(255, 116, 115, 115);
+
   BoxDecoration trainlineBox() {
     return BoxDecoration(
-      color: Colors.white,
+      color: backgroundColor,
       border: Border.all(
-        color: Color.fromARGB(255, 7, 103, 206),
-        width: 1.0,
+        color: trainlineBoxColor,
+        width: 0.73,
         style: BorderStyle.solid,
         strokeAlign: StrokeAlign.center,
       ),
