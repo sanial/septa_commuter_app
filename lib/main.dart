@@ -71,7 +71,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var filterTrainLines = buildItemsbyFilter(_isStation);
+    final List<String> _trainlinefiltered = <String>[];
     final _selectedfilterchip = [];
+
     return Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
@@ -79,14 +81,13 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
           centerTitle: true,
           title: Text(
-              'SEPTA Regional Rail',
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'Raleway',
-                fontWeight: FontWeight.bold,
-              ),
+            'SEPTA Regional Rail',
+            style: TextStyle(
+              fontSize: 14,
+              fontFamily: 'Raleway',
+              fontWeight: FontWeight.bold,
             ),
-          
+          ),
           backgroundColor: backgroundColor,
           leading: Builder(
             builder: (BuildContext context) {
@@ -113,7 +114,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 //Trainlines Scroll
                 SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.vertical,
                     child: Column(
                       //mainAxisSize: MainAxisSize.min,
                       children: [
@@ -123,18 +124,18 @@ class _HomePageState extends State<HomePage> {
                         ),
                         //Trainlines List
                         SizedBox(
-                          height: 35,
+                          height: 200,
                           width: MediaQuery.of(context).size.width,
                           child: ListView.builder(
                               physics: ClampingScrollPhysics(),
                               shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
+                              scrollDirection: Axis.vertical,
                               itemCount: _trainlines.length,
                               itemBuilder: ((context, index) {
                                 //Each trainline
                                 final trainline = _trainlines[index];
                                 //     _trainlines_queue.elementAt(index);
-                                return Row(
+                                return Column(
                                   children: [
                                     FilterChip(
                                         side: BorderSide(
@@ -158,26 +159,21 @@ class _HomePageState extends State<HomePage> {
                                             trainline.isSelected =
                                                 !trainline.isSelected;
 
-                                            // if (trainline.isSelected) {
-                                            //   //line.read(trainlineSelectedProvider.notifier).state;
-                                            //   // _trainlinefilters
-                                            //   //     .add(trainline.line);
-                                            //   //_trainlines_queue.removeFirst();
-                                            //   _trainlines
-                                            //       .remove(trainline);
-                                            //   _trainlines
-                                            //       .add(trainline);
-                                            //   print(_trainlines);
-
-                                            //   // _trainlines_queue.addFirst(
-                                            //   //     _trainlines_queue
-                                            //   //         .elementAt(index));
-                                            //   print(trainline.line);
-                                            //   //_trainlines_queue.remove(trainline);
-                                            // } else {
-                                            //   //_trainlinefilters.remove(trainline.line);
-
-                                            // }
+                                            //if trainline filterchips selected
+                                            //check if an empty list contains it, and add it to list
+                                            //else if trainline filterchip unselected, remove from list
+                                            if (selected) {
+                                              line.watch(
+                                                  trainlineSelectedProvider);
+                                              line
+                                                      .read(
+                                                          trainlineSelectedProvider
+                                                              .notifier)
+                                                      .state =
+                                                  TrainLineSelected.isSelected;
+                                              print(
+                                                  TrainLineSelected.isSelected);
+                                            }
                                           });
                                         })),
                                   ],
@@ -198,21 +194,23 @@ class _HomePageState extends State<HomePage> {
           child: BottomAppBar(
             color: Colors.white,
             elevation: 0,
-            child: Icon(Icons.home_rounded, color: borderLineBox,),
-            
-  ),
+            child: Icon(
+              Icons.home_outlined,
+              color: borderLineBox,
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
               SizedBox(
-                height: 10,
+                height: 30,
               ),
               //**TrainView Data */
               Consumer(builder: ((context, ref, child) {
                 final _trainview_data = ref.watch(trainviewsDataProvider);
-
+                //final _trainlines = ref.watch(trainlineProvider);
                 //final _trainsched_data = ref.watch(trainschedsDataProvider);
                 //final _search = ref.watch(searchProvider);
                 return RefreshIndicator(
@@ -233,18 +231,11 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              // Consumer(builder: ((context, ref, child) {
-                              //   List<TrainLineFilter> _trainlines =
-                              //       ref.read(trainlineProvider);
-                              // })),
-                              // TextFormField(
-                              //   onChanged: ((value) {
-                              //     _search.state = value;
-                              //   },),
-                              // ),
-
                               SizedBox(
-                                height: 500,
+                                height: 10,
+                              ),
+                              SizedBox(
+                                height: 550,
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView.builder(
                                     physics: ClampingScrollPhysics(),
@@ -260,26 +251,31 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           Column(
                                             children: [
-                                              SizedBox(
-                                                height: 20,
-                                              ),
                                               //Nested Stacks
                                               Stack(
-                                                alignment: AlignmentDirectional
-                                                    .topCenter,
+                                                // alignment: Alignment.bottomCenter,
+                                                clipBehavior: Clip.none,
                                                 children: [
                                                   //Concentric Circles
-                                                  Container(
-                                                    height: 20,
-                                                    width: 20,
-                                                    decoration: ShapeDecoration(
-                                                      shape: CircleBorder(),
-                                                      color: borderLineBox,
-                                                    ),
-                                                  ),
+                                                  // Positioned(
+                                                  //   top: 0,
+                                                  //   left: 55,
+                                                  //   height: 20,
+                                                  //   width: 20,
+                                                  //   child: Container(
+                                                  //     height: 20,
+                                                  //     width: 20,
+                                                  //     decoration:
+                                                  //         ShapeDecoration(
+                                                  //       shape: CircleBorder(),
+                                                  //       color: borderLineBox,
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
 
                                                   //BorderLineBox stacks
                                                   Stack(
+                                                      clipBehavior: Clip.none,
                                                       alignment:
                                                           AlignmentDirectional
                                                               .topCenter,
@@ -290,9 +286,12 @@ class _HomePageState extends State<HomePage> {
                                                           height: 459,
                                                           decoration:
                                                               BoxDecoration(
+                                                            // color:
+                                                            //     borderLineBox,
                                                             border: Border.all(
-                                                                color: borderLineBox,
-                                                                width: 1.0),
+                                                                color:
+                                                                    borderLineBox,
+                                                                width: 0.73),
                                                             borderRadius:
                                                                 BorderRadius.all(
                                                                     Radius.circular(
@@ -314,8 +313,9 @@ class _HomePageState extends State<HomePage> {
                                                         Column(
                                                           children: [
                                                             SizedBox(
-                                                              height: 15,
+                                                              height: 25,
                                                             ),
+                                                            //Trainlinefilter box
                                                             Container(
                                                               margin:
                                                                   const EdgeInsets
@@ -365,7 +365,7 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  static const trainlineBoxColor = Color(0xFF3897F1);
+  static const trainlineBoxColor = Color(0xFF3E68FF);
   static const backgroundColor = Color(0xFFF1F1F1);
   static const borderLineBox = Color.fromARGB(255, 116, 115, 115);
 
@@ -374,7 +374,7 @@ class _HomePageState extends State<HomePage> {
       color: backgroundColor,
       border: Border.all(
         color: trainlineBoxColor,
-        width: 0.73,
+        width: 1,
         style: BorderStyle.solid,
         strokeAlign: StrokeAlign.center,
       ),

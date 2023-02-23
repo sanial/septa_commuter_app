@@ -10,7 +10,7 @@ import 'package:septa_commuter_app/models/train_schedule/train_schedule.dart';
 import 'package:septa_commuter_app/services/services.dart';
 import '../models/train_view/train_view.dart';
 
-//**Data Provier**
+//**Future Data Provider**
 //returns trainview list to rest of the app, trainview state for the app
 final trainviewsDataProvider = FutureProvider<List<TrainView>>((ref) async {
   //reading the trainviewsProvider that we made and then getting the Train Views using its function
@@ -25,31 +25,15 @@ final trainschedsDataProvider =
 
 final searchProvider = StateProvider(((ref) => ' '));
 
-//**Filters*/
-
+//**Selecting Data Provider*/
 class TrainLine extends LinkedListEntry<TrainLine> {
   TrainLine({required this.line, required this.isSelected});
 
   final String line;
   bool isSelected;
-
-  Set hashSet = HashSet();
-
-  //final trainlineLinkedList = LinkedList<TrainLine>();
-  // Queue _trainlines_queue =
-  //                   Queue.from(_listOfTrainLines);
-
-  // ignore: unused_field
-
-  addtofront() {
-    
-
-  }
 }
 
-
-
-final _listOfTrainLines = [
+ var listOfTrainLines = [
   TrainLine(line: 'Airport', isSelected: false),
   TrainLine(line: 'Chestnut Hill East', isSelected: false),
   TrainLine(line: 'Chestnut Hill West', isSelected: false),
@@ -65,14 +49,27 @@ final _listOfTrainLines = [
   TrainLine(line: 'Wilmington Newark', isSelected: false),
   TrainLine(line: 'West Trenton', isSelected: false),
 ];
+enum TrainLineSelected { 
+  all, 
+  isSelected 
+}
+
+final trainlineSelectedProvider = StateProvider<TrainLineSelected>(
+  (ref) => TrainLineSelected.all,
+);
 
 final trainlineProvider = Provider<List<TrainLine>>((ref) {
-  return _listOfTrainLines;
+  final selectedType = ref.watch(trainlineSelectedProvider);
+  switch (selectedType) {
+    case TrainLineSelected.all:
+      return listOfTrainLines;
+    case TrainLineSelected.isSelected:
+      return listOfTrainLines.where((i) => (i.isSelected == true)).toList();
+  }
+  //return _listOfTrainLines;
 });
 
-// final trainlineSelectedProvider = StateProvider<List<TrainLine>>(((ref) {
-//   return [];
-// })
+
 
 // class TrainlineNotifier extends StateNotifier<List<TrainLine>>{
 //   TrainlineNotifier(): super([]);
@@ -88,7 +85,7 @@ final trainlineProvider = Provider<List<TrainLine>>((ref) {
 //   }
 // }
 
-enum TrainLineFilter { all, obtained }
+
 
 // final trainlinesFilterProvider = StateNotifierProvider<TrainLineFilter, List<TrainLine>>(
 //   // We return the default filter type, here name.
