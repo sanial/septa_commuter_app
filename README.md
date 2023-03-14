@@ -1,6 +1,5 @@
 # septa_commuter_app
 
-SEPTA Commuter App
 This is a mobile application built using Flutter that shows train schedules and real-time data for various train routes.
 
 ## Features
