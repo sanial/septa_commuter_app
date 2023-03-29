@@ -14,13 +14,13 @@ import '../models/train_view/train_view.dart';
 //returns trainview list to rest of the app, trainview state for the app
 final trainviewsDataProvider = FutureProvider<List<TrainView>>((ref) async {
   //reading the trainviewsProvider that we made and then getting the Train Views using its function
-  return ref.watch(trainviewsProvider).getTrainViews();
+  return ref.watch(trainviewsServiceProvider).getTrainViews();
 });
 
 final trainschedsDataProvider =
     FutureProvider<List<TrainSchedule>>((ref) async {
   //reading the trainviewsProvider that we made and then getting the Train Views using its function
-  return ref.watch(trainviewsProvider).getTrainScheds();
+  return ref.watch(trainviewsServiceProvider).getTrainScheds();
 });
 
 final searchProvider = StateProvider(((ref) => ' '));
@@ -50,20 +50,20 @@ class TrainLine extends LinkedListEntry<TrainLine> {
   TrainLine(line: 'Wilmington Newark', isSelected: false),
   TrainLine(line: 'West Trenton', isSelected: false),
 ];
+var listOfTrainViewSelected = [];
+
 enum TrainLineSelected { 
   all, 
   isSelected 
 }
 
+//watched
 final trainlineSelectedProvider = StateProvider<TrainLineSelected>(
+  //return default selected type, which is all are displayed
   (ref) => TrainLineSelected.all,
 );
 
-final trainviewSelectedProvider = StateProvider<TrainLineSelected>(
-  (ref) => TrainLineSelected.all,
-  //add the switch here instead and watch trainviewProvider
-);
-
+//used in main
 final trainlineProvider = Provider<List<TrainLine>>((ref) {
   final selectedType = ref.watch(trainlineSelectedProvider);
   switch (selectedType) {
@@ -72,8 +72,25 @@ final trainlineProvider = Provider<List<TrainLine>>((ref) {
     case TrainLineSelected.isSelected:
       return listOfTrainLines.where((i) => (i.isSelected == true)).toList() + listOfTrainLines.where((i) => (i.isSelected == false)).toList() ;
   }
-  //return _listOfTrainLines;
 });
+
+// final trainviewProvider = Provider<List<TrainView>>((ref) {
+//   final selectedTrainViewType = ref.watch(trainlineSelectedProvider);
+//   switch (selectedTrainViewType) {
+//     case TrainLineSelected.all:
+//       return listOfTrainLines;
+//     case TrainLineSelected.isSelected:
+//       return listOfTrainLines.where((i) => (i.isSelected == true)).toList() + listOfTrainLines.where((i) => (i.isSelected == false)).toList() ;
+//   }
+// });
+
+// final trainviewSelectedProvider = StateProvider<TrainLineSelected>(
+//   final selectedViewType = ref.watch(trainlineSelectedProvider);
+//   (ref) => TrainLineSelected.all,
+//   //add the switch here instead and watch trainviewProvider
+// );
+
+
 
 
 

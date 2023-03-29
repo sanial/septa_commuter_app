@@ -7,7 +7,7 @@ import 'package:septa_commuter_app/models/train_schedule/train_schedule.dart';
 import '../models/train_view/train_view.dart';
 
 //provides the TrainViewApi Service with all its functions to the rest of you code
-final trainviewsProvider = Provider<TrainViewApiService>((ref) => TrainViewApiService());
+final trainviewsServiceProvider = Provider<TrainViewApiService>((ref) => TrainViewApiService());
 
 class TrainViewApiService {
   // static const String baseUrl = 'http://www3.septa.org/hackathon/$trainView/';
