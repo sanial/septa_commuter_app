@@ -25,6 +25,7 @@ final trainschedsDataProvider =
 
 final searchProvider = StateProvider(((ref) => ' '));
 
+//--------------------------------------------------------//
 //**Selecting Data Provider*/
 class TrainLine extends LinkedListEntry<TrainLine> {
   TrainLine({required this.line, required this.isSelected});
@@ -58,13 +59,18 @@ final trainlineSelectedProvider = StateProvider<TrainLineSelected>(
   (ref) => TrainLineSelected.all,
 );
 
+final trainviewSelectedProvider = StateProvider<TrainLineSelected>(
+  (ref) => TrainLineSelected.all,
+  //add the switch here instead and watch trainviewProvider
+);
+
 final trainlineProvider = Provider<List<TrainLine>>((ref) {
   final selectedType = ref.watch(trainlineSelectedProvider);
   switch (selectedType) {
     case TrainLineSelected.all:
       return listOfTrainLines;
     case TrainLineSelected.isSelected:
-      return listOfTrainLines.where((i) => (i.isSelected == true)).toList();
+      return listOfTrainLines.where((i) => (i.isSelected == true)).toList() + listOfTrainLines.where((i) => (i.isSelected == false)).toList() ;
   }
   //return _listOfTrainLines;
 });
