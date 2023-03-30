@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:septa_commuter_app/dataprovider/data_provider.dart';
+import 'package:septa_commuter_app/dataprovider/trainview_selected_provider.dart';
 import 'package:septa_commuter_app/models/train_schedule/train_schedule.dart';
 import 'package:septa_commuter_app/models/train_view/train_view.dart';
 import 'package:septa_commuter_app/services/services.dart';
@@ -216,6 +217,7 @@ class _HomePageState extends State<HomePage> {
                 return RefreshIndicator(
                   onRefresh: () async {
                     ref.refresh(trainviewsDataProvider.future);
+                    //final todos = ref.watch(filteredTrainViewSelecteds);
                     //await ref.read(trainviewsDataProvider);
                   }, //TODO FIX not working
                   child: _trainview_data.when(
@@ -339,6 +341,7 @@ class _HomePageState extends State<HomePage> {
                                                                             .bold),
                                                               ),
                                                             ),
+                                                            Container(child: Text(trainviewList[index].currentstop!),),
                                                           ],
                                                         ),
                                                       ]),

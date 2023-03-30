@@ -74,20 +74,14 @@ final trainlineProvider = Provider<List<TrainLine>>((ref) {
   }
 });
 
-// final trainviewProvider = Provider<List<TrainView>>((ref) {
-//   final selectedTrainViewType = ref.watch(trainlineSelectedProvider);
-//   switch (selectedTrainViewType) {
-//     case TrainLineSelected.all:
-//       return listOfTrainLines;
-//     case TrainLineSelected.isSelected:
-//       return listOfTrainLines.where((i) => (i.isSelected == true)).toList() + listOfTrainLines.where((i) => (i.isSelected == false)).toList() ;
-//   }
-// });
+//TODO watching the trainlineProvider to change trainviewProvider
+// final trainviewProvider = Provider<List<TrainView>>((ref) { 
+  
 
 // final trainviewSelectedProvider = StateProvider<TrainLineSelected>(
 //   final selectedViewType = ref.watch(trainlineSelectedProvider);
 //   (ref) => TrainLineSelected.all,
-//   //add the switch here instead and watch trainviewProvider
+  
 // );
 
 
