@@ -67,7 +67,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var _isStation = false;
   var _lines = ['Lansdale', 'Airport', 'Cynwyd'];
-  var _trainlinefilters = [];
+  List filteredTrainview = [];
+  //var _trainlinefilters = [];
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   // Get the list of cars from the future provider.
+  //   trainviewsDataProvider.listen(() {
+  //     setState(() {
+  //       this.cars = cars;
+  //       this.filteredCars = cars.where((car) => car.name.contains('1')).toList();
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +121,6 @@ class _HomePageState extends State<HomePage> {
           //**TrainLine Filter**/
           Consumer(builder: ((context, line, child) {
             final _trainlines = line.watch(trainlineProvider);
-            // final _trainlines_selected = LinkedList<TrainLine>();
-            //final Queue _trainlines_queue = Queue.from(_trainlines);
 
             //Horizontal trainline FilterChip scroll
             return Column(
@@ -172,8 +184,15 @@ class _HomePageState extends State<HomePage> {
                                                               .notifier)
                                                       .state =
                                                   TrainLineSelected.isSelected;
-                                              print(
-                                                  TrainLineSelected.isSelected);
+                                              
+                                              filteredTrainview
+                                                  .add(trainline.line);
+                                              print(filteredTrainview);
+                                            }
+                                            if(!selected){
+                                              filteredTrainview
+                                                  .remove(trainline.line);
+
                                             }
                                           });
                                         })),
@@ -210,15 +229,14 @@ class _HomePageState extends State<HomePage> {
               ),
               //**TrainView Data */
               Consumer(builder: ((context, ref, child) {
-                final _trainview_data = ref.watch(trainviewsDataProvider);
-                //final _trainlines = ref.watch(trainlineProvider);
-                //final _trainsched_data = ref.watch(trainschedsDataProvider);
+                //final _trainview_data = ref.watch(trainviewsDataProvider);
+                final _trainview_data = ref.watch(filteredTrainViewsProvider);
+                //final _trainview_filtered_data = ref.watch(filteredTrainViewsProvider);
                 //final _search = ref.watch(searchProvider);
                 return RefreshIndicator(
                   onRefresh: () async {
                     ref.refresh(trainviewsDataProvider.future);
-                    //final todos = ref.watch(filteredTrainViewSelecteds);
-                    //await ref.read(trainviewsDataProvider);
+
                   }, //TODO FIX not working
                   child: _trainview_data.when(
                     data: (_trainview_data) {
@@ -244,7 +262,16 @@ class _HomePageState extends State<HomePage> {
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
                                     itemCount: trainviewList.length,
+                                    //filteredTrainview.isNotEmpty? trainviewList.where((i) => filteredTrainview.contains(i.line)).length: trainviewList.length,
+                                    //isEmpty? if true display only selected trains : else if false display all
+                                    // trainline.isSelected
+                                    //               ? trainlineBoxColor
+                                    //               : Colors.white
+                                    // trainviewList.length,
                                     itemBuilder: (context, index) {
+                                      // if (trainviewList.contains(element)) {
+
+                                      // }
                                       //Row of BorderLineBox stacks
                                       return Row(
                                         children: [
@@ -317,6 +344,7 @@ class _HomePageState extends State<HomePage> {
                                                             SizedBox(
                                                               height: 25,
                                                             ),
+
                                                             //Trainlinefilter box
                                                             Container(
                                                               margin:
@@ -327,10 +355,12 @@ class _HomePageState extends State<HomePage> {
                                                                       .all(3.0),
                                                               decoration:
                                                                   trainlineBox(),
-                                                              child: Text(
+                                                              child:Text(
                                                                 trainviewList[
                                                                         index]
                                                                     .line!,
+                                                              //filteredTrainview.isNotEmpty? if(filteredTrainview.contains(trainviewList[index].line!))){Text(trainviewList[index].line!)}: Text(trainviewList[index].line!),
+                                                              
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         12,
@@ -341,7 +371,12 @@ class _HomePageState extends State<HomePage> {
                                                                             .bold),
                                                               ),
                                                             ),
-                                                            Container(child: Text(trainviewList[index].currentstop!),),
+                                                            Container(
+                                                              child: Text(
+                                                                  trainviewList[
+                                                                          index]
+                                                                      .currentstop!),
+                                                            ),
                                                           ],
                                                         ),
                                                       ]),

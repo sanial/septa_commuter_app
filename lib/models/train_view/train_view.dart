@@ -52,6 +52,14 @@ class TrainView {
         trackChange: json['TRACK_CHANGE'] as String?,
       );
 
+    // TrainView copyWith({String? id, String? description, bool? completed}) {
+    //   return TrainView(
+    //     id: id ?? this.id,
+    //     description: description ?? this.description,
+    //     completed: completed ?? this.completed,
+    //   );
+    // }
+
   // Map<String, dynamic> toJson() => {
   //       'lat': lat,
   //       'lon': lon,
