@@ -171,6 +171,7 @@ class _HomePageState extends State<HomePage> {
                                           setState(() {
                                             trainline.isSelected =
                                                 !trainline.isSelected;
+                                            line.refresh(trainlineProvider);
 
                                             //if trainline filterchips selected
                                             //check if an empty list contains it, and add it to list
@@ -184,15 +185,14 @@ class _HomePageState extends State<HomePage> {
                                                               .notifier)
                                                       .state =
                                                   TrainLineSelected.isSelected;
-                                              
+
                                               filteredTrainview
                                                   .add(trainline.line);
                                               print(filteredTrainview);
                                             }
-                                            if(!selected){
+                                            if (!selected) {
                                               filteredTrainview
                                                   .remove(trainline.line);
-
                                             }
                                           });
                                         })),
@@ -236,7 +236,6 @@ class _HomePageState extends State<HomePage> {
                 return RefreshIndicator(
                   onRefresh: () async {
                     ref.refresh(trainviewsDataProvider.future);
-
                   }, //TODO FIX not working
                   child: _trainview_data.when(
                     data: (_trainview_data) {
@@ -355,12 +354,12 @@ class _HomePageState extends State<HomePage> {
                                                                       .all(3.0),
                                                               decoration:
                                                                   trainlineBox(),
-                                                              child:Text(
+                                                              child: Text(
                                                                 trainviewList[
                                                                         index]
                                                                     .line!,
-                                                              //filteredTrainview.isNotEmpty? if(filteredTrainview.contains(trainviewList[index].line!))){Text(trainviewList[index].line!)}: Text(trainviewList[index].line!),
-                                                              
+                                                                //filteredTrainview.isNotEmpty? if(filteredTrainview.contains(trainviewList[index].line!))){Text(trainviewList[index].line!)}: Text(trainviewList[index].line!),
+
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         12,
