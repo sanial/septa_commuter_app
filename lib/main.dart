@@ -374,7 +374,19 @@ class _HomePageState extends State<HomePage> {
                                                               child: Text(
                                                                   trainviewList[
                                                                           index]
+                                                                      .trainno!),
+                                                            ),
+                                                            Container(
+                                                              child: Text(
+                                                                  trainviewList[
+                                                                          index]
                                                                       .currentstop!),
+                                                            ),
+                                                            Container(
+                                                              child: Text('${
+                                                                  trainviewList[
+                                                                          index]
+                                                                      .late!}'),
                                                             ),
                                                           ],
                                                         ),

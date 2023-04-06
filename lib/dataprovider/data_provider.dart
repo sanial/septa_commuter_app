@@ -58,13 +58,13 @@ var listOfTrainLines = [
   TrainLine(line: 'Cynwyd', isSelected: false),
   TrainLine(line: 'Fox Chase', isSelected: false),
   TrainLine(line: 'Glenside', isSelected: false),
-  TrainLine(line: 'Lansdale Doylestown', isSelected: false),
-  TrainLine(line: 'Media Wawa', isSelected: false),
-  TrainLine(line: 'Manayunk Norristown', isSelected: false),
-  TrainLine(line: 'Paoli Thorndale', isSelected: false),
+  TrainLine(line: 'Lansdale/Doylestown', isSelected: false),
+  TrainLine(line: 'Media/Wawa', isSelected: false),
+  TrainLine(line: 'Manayunk/Norristown', isSelected: false),
+  TrainLine(line: 'Paoli/Thorndale', isSelected: false),
   TrainLine(line: 'Trenton', isSelected: false),
   TrainLine(line: 'Warminster', isSelected: false),
-  TrainLine(line: 'Wilmington Newark', isSelected: false),
+  TrainLine(line: 'Wilmington/Newark', isSelected: false),
   TrainLine(line: 'West Trenton', isSelected: false),
 ];
 
