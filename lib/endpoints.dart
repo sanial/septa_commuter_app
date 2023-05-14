@@ -13,7 +13,7 @@ class Endpoints {
       return baseUrl = 'http://www3.septa.org/hackathon/$endpoint/';
     }
   }
-  geturlno(trainno){
+  static geturlno(trainno){
     //RRScedules/trainno
     return baseUrl = 'http://www3.septa.org/hackathon/RRSchedules/$trainno';
   }

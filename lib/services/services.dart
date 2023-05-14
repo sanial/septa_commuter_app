@@ -28,8 +28,8 @@ class TrainViewApiService {
   }
 
   
-  Future<List<TrainSchedule>> getTrainScheds() async {
-    Response response = await get(Uri.parse(Endpoints.geturlendpoint('RRSchedules')));
+  Future<List<TrainSchedule>> getTrainScheds(String trainno) async {
+    Response response = await get(Uri.parse(Endpoints.geturlno(trainno)));
     if (response.statusCode == 200) {
       final List result = jsonDecode(response.body);
       return result.map((json) => TrainSchedule.fromJson(json)).toList();

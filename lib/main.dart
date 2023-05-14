@@ -231,6 +231,10 @@ class _HomePageState extends State<HomePage> {
               Consumer(builder: ((context, ref, child) {
                 //final _trainview_data = ref.watch(trainviewsDataProvider);
                 final _trainview_data = ref.watch(filteredTrainViewsProvider);
+                var trainId = '223';
+                // final _train_scheds =
+                //     ref.watch(trainschedsDataProvider(trainId));
+
                 //final _trainview_filtered_data = ref.watch(filteredTrainViewsProvider);
                 //final _search = ref.watch(searchProvider);
                 return RefreshIndicator(
@@ -267,136 +271,169 @@ class _HomePageState extends State<HomePage> {
                                     //               ? trainlineBoxColor
                                     //               : Colors.white
                                     // trainviewList.length,
+
                                     itemBuilder: (context, index) {
-                                      // if (trainviewList.contains(element)) {
+                                      trainId = trainviewList[index].trainno!;
+                                      final _train_scheds = ref.watch(trainschedsDataProvider(trainId));
+                                      
+                                      // final _trainsched_data = ref.watch(
+                                      //   trainschedsDataProvider(
+                                      //       trainviewList[index].trainno!));
+                                      return Row(children: [
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Column(
+                                          children: [
+                                            //Nested Stacks
+                                            Stack(
+                                              // alignment: Alignment.bottomCenter,
+                                              clipBehavior: Clip.none,
+                                              children: [
+                                                //Concentric Circles
+                                                // Positioned(
+                                                //   top: 0,
+                                                //   left: 55,
+                                                //   height: 20,
+                                                //   width: 20,
+                                                //   child: Container(
+                                                //     height: 20,
+                                                //     width: 20,
+                                                //     decoration:
+                                                //         ShapeDecoration(
+                                                //       shape: CircleBorder(),
+                                                //       color: borderLineBox,
+                                                //     ),
+                                                //   ),
+                                                // ),
 
-                                      // }
-                                      //Row of BorderLineBox stacks
-                                      return Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Column(
-                                            children: [
-                                              //Nested Stacks
-                                              Stack(
-                                                // alignment: Alignment.bottomCenter,
-                                                clipBehavior: Clip.none,
-                                                children: [
-                                                  //Concentric Circles
-                                                  // Positioned(
-                                                  //   top: 0,
-                                                  //   left: 55,
-                                                  //   height: 20,
-                                                  //   width: 20,
-                                                  //   child: Container(
-                                                  //     height: 20,
-                                                  //     width: 20,
-                                                  //     decoration:
-                                                  //         ShapeDecoration(
-                                                  //       shape: CircleBorder(),
-                                                  //       color: borderLineBox,
-                                                  //     ),
-                                                  //   ),
-                                                  // ),
+                                                //BorderLineBox stacks
+                                                Stack(
+                                                  clipBehavior: Clip.none,
+                                                  alignment:
+                                                      AlignmentDirectional
+                                                          .topCenter,
+                                                  children: [
+                                                    //BorderLineBox
+                                                    Container(
+                                                      width: 132,
+                                                      height: 459,
+                                                      decoration: BoxDecoration(
+                                                        // color:
+                                                        //     borderLineBox,
+                                                        border: Border.all(
+                                                            color:
+                                                                borderLineBox,
+                                                            width: 0.73),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    30) //                 <--- border radius here
+                                                                ),
+                                                      ),
+                                                    ),
 
-                                                  //BorderLineBox stacks
-                                                  Stack(
-                                                      clipBehavior: Clip.none,
-                                                      alignment:
-                                                          AlignmentDirectional
-                                                              .topCenter,
-                                                      children: [
-                                                        //BorderLineBox
-                                                        Container(
-                                                          width: 132,
-                                                          height: 459,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            // color:
-                                                            //     borderLineBox,
-                                                            border: Border.all(
-                                                                color:
-                                                                    borderLineBox,
-                                                                width: 0.73),
-                                                            borderRadius:
-                                                                BorderRadius.all(
-                                                                    Radius.circular(
-                                                                        30) //                 <--- border radius here
-                                                                    ),
-                                                          ),
+                                                    //TrainLine Text
+                                                    Column(children: [
+                                                      SizedBox(
+                                                        height: 25,
+                                                      ),
+
+                                                      //Trainlinefilter box
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                            .all(3.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(3.0),
+                                                        decoration:
+                                                            trainlineBox(),
+                                                        child: Text(
+                                                          trainviewList[index]
+                                                              .line!,
+                                                          //filteredTrainview.isNotEmpty? if(filteredTrainview.contains(trainviewList[index].line!))){Text(trainviewList[index].line!)}: Text(trainviewList[index].line!),
+
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  trainlineBoxColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
                                                         ),
-                                                        // ClipRRect(
-                                                        //   borderRadius:
-                                                        //       BorderRadius.circular(30.0),
-                                                        //   child: Container(
-                                                        //     width: 20,
-                                                        //     height: 100,
-                                                        //     color: Colors.red,
-                                                        //   ),
-                                                        // ),
-
-                                                        //TrainLine Text
-                                                        Column(
-                                                          children: [
-                                                            SizedBox(
-                                                              height: 25,
-                                                            ),
-
-                                                            //Trainlinefilter box
-                                                            Container(
-                                                              margin:
-                                                                  const EdgeInsets
-                                                                      .all(3.0),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(3.0),
-                                                              decoration:
-                                                                  trainlineBox(),
-                                                              child: Text(
-                                                                trainviewList[
-                                                                        index]
-                                                                    .line!,
-                                                                //filteredTrainview.isNotEmpty? if(filteredTrainview.contains(trainviewList[index].line!))){Text(trainviewList[index].line!)}: Text(trainviewList[index].line!),
-
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color:
-                                                                        trainlineBoxColor,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              child: Text(
-                                                                  trainviewList[
-                                                                          index]
-                                                                      .trainno!),
-                                                            ),
-                                                            Container(
-                                                              child: Text(
-                                                                  trainviewList[
-                                                                          index]
-                                                                      .currentstop!),
-                                                            ),
-                                                            Container(
-                                                              child: Text('${
-                                                                  trainviewList[
-                                                                          index]
-                                                                      .late!}'),
-                                                            ),
-                                                          ],
+                                                      ),
+                                                      Container(
+                                                        child: Text(
+                                                            trainviewList[index]
+                                                                .trainno!),
+                                                      ),
+                                                      Container(
+                                                        child: Text(
+                                                            trainviewList[index]
+                                                                .currentstop!),
+                                                      ),
+                                                      Container(
+                                                        child: Text(
+                                                            '${trainviewList[index].late!}'),
+                                                      ),
+                                                      Container(
+                                                        child:
+                                                            _train_scheds.when(
+                                                          data:
+                                                              (_trainscheds_data) {
+                                                            //ListofTrainviewslive
+                                                            List<TrainSchedule>
+                                                                trainschedsList =
+                                                                _trainscheds_data
+                                                                    .map(
+                                                                      (e) => e,
+                                                                    )
+                                                                    .toList();
+                                                            return Column(
+                                                                //mainAxisSize: MainAxisSize.min,
+                                                                children: [
+                                                                  SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          550,
+                                                                      width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width,
+                                                                      child: ListView.builder(
+                                                                          itemCount: trainschedsList.length,
+                                                                          itemBuilder: (context, index) {
+                                                                            return Column(
+                                                                              children: [
+                                                                                SizedBox(
+                                                                                  child: Text(trainschedsList[index].schedTm!),
+                                                                                )
+                                                                              ],
+                                                                            );
+                                                                          }))
+                                                                ]);
+                                                          },
+                                                          error: (error,
+                                                                  stackTrace) =>
+                                                              Text(error
+                                                                  .toString()),
+                                                          loading: (() =>
+                                                              const Center(
+                                                                child:
+                                                                    CircularProgressIndicator(),
+                                                              )),
                                                         ),
-                                                      ]),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      );
+                                                      )
+                                                    ]),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                      ]);
                                     }),
                               ),
                             ],

@@ -32,12 +32,12 @@ final filteredTrainViewsProvider = FutureProvider<List<TrainView>>((ref) async {
 });
 
 
-
-
 final trainschedsDataProvider =
-    FutureProvider<List<TrainSchedule>>((ref) async {
-  //reading the trainviewsProvider that we made and then getting the Train Views using its function
-  return ref.watch(trainviewsServiceProvider).getTrainScheds();
+    FutureProvider.family<List<TrainSchedule>, String>((ref, trainId) async {
+  //reading the trainviewsProvider that we made
+  //then getting the Train Views using its function
+  
+  return ref.watch(trainviewsServiceProvider).getTrainScheds(trainId);
 });
 
 final searchProvider = StateProvider(((ref) => ' '));
