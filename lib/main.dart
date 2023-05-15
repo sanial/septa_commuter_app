@@ -316,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                                                   children: [
                                                     //BorderLineBox
                                                     Container(
-                                                      width: 132,
+                                                      width: 155,
                                                       height: 459,
                                                       decoration: BoxDecoration(
                                                         // color:
@@ -389,31 +389,49 @@ class _HomePageState extends State<HomePage> {
                                                                       (e) => e,
                                                                     )
                                                                     .toList();
-                                                            return Column(
-                                                                //mainAxisSize: MainAxisSize.min,
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height: 10,
-                                                                  ),
-                                                                  SizedBox(
-                                                                      height:
-                                                                          550,
-                                                                      width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width,
-                                                                      child: ListView.builder(
-                                                                          itemCount: trainschedsList.length,
-                                                                          itemBuilder: (context, index) {
-                                                                            return Column(
-                                                                              children: [
-                                                                                SizedBox(
-                                                                                  child: Text(trainschedsList[index].schedTm!),
-                                                                                )
-                                                                              ],
-                                                                            );
-                                                                          }))
-                                                                ]);
+                                                            return SingleChildScrollView(
+                                                              scrollDirection: Axis.vertical,
+                                                              child: Column(
+                                                                  mainAxisSize: MainAxisSize.min,
+                                                                  children: [
+                                                                    SizedBox(
+                                                                      height: 10,
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            340,
+                                                                        width: 140,
+                                                                        child: ListView.builder(
+                                                                            physics: ClampingScrollPhysics(),
+                                                                            shrinkWrap: true,
+                                                                            scrollDirection: Axis.vertical,
+                                                                            itemCount: trainschedsList.length,
+                                                                            itemBuilder: (context, index) {
+                                                                              return Column(
+                                                                                children: [
+                                                                                  Row(
+                                                                                    children: [
+                                                                                      SizedBox(
+                                                                                        //width: 30,
+                                                                                        child: Text(trainschedsList[index].actTm!),
+                                                                                      ),
+                                                                                      SizedBox(width: 6,),
+                                                                                      SizedBox(
+                                                                                        width: 80,
+                                                                                        child: Text(trainschedsList[index].station!,maxLines: 3,
+                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                            style: TextStyle(fontSize: 14)),
+                                                                                      ),
+                                                                                      
+                                                                                    
+                                                                                    ],
+                                                                                  ),
+                                                                                  SizedBox(height: 7,)
+                                                                                ],
+                                                                              );
+                                                                            }))
+                                                                  ]),
+                                                            );
                                                           },
                                                           error: (error,
                                                                   stackTrace) =>
