@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Padding(
                           padding: EdgeInsets.all(10),
-                          child: Text('I AM TAKING RAIL LINE: '),
+                          child: Text('SELECT RAIL LINE: '),
                         ),
                         //Trainlines List
                         SizedBox(
@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> {
             elevation: 0,
             child: Icon(
               Icons.home_outlined,
-              color: borderLineBox,
+              color: iconOutlineColor,
             ),
           ),
         ),
@@ -274,8 +274,9 @@ class _HomePageState extends State<HomePage> {
 
                                     itemBuilder: (context, index) {
                                       trainId = trainviewList[index].trainno!;
-                                      final _train_scheds = ref.watch(trainschedsDataProvider(trainId));
-                                      
+                                      final _train_scheds = ref.watch(
+                                          trainschedsDataProvider(trainId));
+
                                       // final _trainsched_data = ref.watch(
                                       //   trainschedsDataProvider(
                                       //       trainviewList[index].trainno!));
@@ -307,23 +308,23 @@ class _HomePageState extends State<HomePage> {
                                                 //   ),
                                                 // ),
 
-                                                //BorderLineBox stacks
+                                                //BorderLineBox stacks ->trainViewBox stacks
                                                 Stack(
                                                   clipBehavior: Clip.none,
                                                   alignment:
                                                       AlignmentDirectional
                                                           .topCenter,
                                                   children: [
-                                                    //BorderLineBox
+                                                    //BorderLineBox ->trainViewBox
                                                     Container(
-                                                      width: 155,
+                                                      width: 160,
                                                       height: 459,
                                                       decoration: BoxDecoration(
-                                                        // color:
-                                                        //     borderLineBox,
+                                                        color: Colors.white,
+                                                        //     borderLineBox, -> trainViewBox
                                                         border: Border.all(
                                                             color:
-                                                                borderLineBox,
+                                                                trainViewBoxBorderColor,
                                                             width: 0.73),
                                                         borderRadius:
                                                             BorderRadius.all(
@@ -334,117 +335,131 @@ class _HomePageState extends State<HomePage> {
                                                     ),
 
                                                     //TrainLine Text
-                                                    Column(children: [
-                                                      SizedBox(
-                                                        height: 25,
-                                                      ),
+                                                    Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 15,
+                                                          ),
 
-                                                      //Trainlinefilter box
-                                                      Container(
-                                                        margin: const EdgeInsets
-                                                            .all(3.0),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(3.0),
-                                                        decoration:
-                                                            trainlineBox(),
-                                                        child: Text(
-                                                          trainviewList[index]
-                                                              .line!,
-                                                          //filteredTrainview.isNotEmpty? if(filteredTrainview.contains(trainviewList[index].line!))){Text(trainviewList[index].line!)}: Text(trainviewList[index].line!),
+                                                          //Trainlinefilter box
+                                                          Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .all(3.0),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(3.0),
+                                                            decoration:
+                                                                trainlineBox(),
+                                                            child: Text(
+                                                              trainviewList[
+                                                                      index]
+                                                                  .line!,
+                                                              //filteredTrainview.isNotEmpty? if(filteredTrainview.contains(trainviewList[index].line!))){Text(trainviewList[index].line!)}: Text(trainviewList[index].line!),
 
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color:
-                                                                  trainlineBoxColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        child: Text(
-                                                            trainviewList[index]
-                                                                .trainno!),
-                                                      ),
-                                                      Container(
-                                                        child: Text(
-                                                            trainviewList[index]
-                                                                .currentstop!),
-                                                      ),
-                                                      Container(
-                                                        child: Text(
-                                                            '${trainviewList[index].late!}'),
-                                                      ),
-                                                      Container(
-                                                        child:
-                                                            _train_scheds.when(
-                                                          data:
-                                                              (_trainscheds_data) {
-                                                            //ListofTrainviewslive
-                                                            List<TrainSchedule>
-                                                                trainschedsList =
-                                                                _trainscheds_data
-                                                                    .map(
-                                                                      (e) => e,
-                                                                    )
-                                                                    .toList();
-                                                            return SingleChildScrollView(
-                                                              scrollDirection: Axis.vertical,
-                                                              child: Column(
-                                                                  mainAxisSize: MainAxisSize.min,
-                                                                  children: [
-                                                                    SizedBox(
-                                                                      height: 10,
-                                                                    ),
-                                                                    SizedBox(
-                                                                        height:
-                                                                            340,
-                                                                        width: 140,
-                                                                        child: ListView.builder(
-                                                                            physics: ClampingScrollPhysics(),
-                                                                            shrinkWrap: true,
-                                                                            scrollDirection: Axis.vertical,
-                                                                            itemCount: trainschedsList.length,
-                                                                            itemBuilder: (context, index) {
-                                                                              return Column(
-                                                                                children: [
-                                                                                  Row(
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color:
+                                                                      trainlineBoxColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Text('Train No.' +
+                                                                trainviewList[
+                                                                        index]
+                                                                    .trainno!),
+                                                          ),
+                                                          Container(
+                                                            child: Text(
+                                                                trainviewList[
+                                                                        index]
+                                                                    .dest!),
+                                                          ),
+                                                          Container(
+                                                            child: Text(
+                                                                '${trainviewList[index].late!}'),
+                                                          ),
+                                                          Container(
+                                                            child: _train_scheds
+                                                                .when(
+                                                              data:
+                                                                  (_trainscheds_data) {
+                                                                //ListofTrainviewslive
+                                                                List<TrainSchedule>
+                                                                    trainschedsList =
+                                                                    _trainscheds_data
+                                                                        .map(
+                                                                          (e) =>
+                                                                              e,
+                                                                        )
+                                                                        .toList();
+                                                                return SingleChildScrollView(
+                                                                  scrollDirection:
+                                                                      Axis.vertical,
+                                                                  child: Column(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      children: [
+                                                                        SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        SizedBox(
+                                                                            height:
+                                                                                340,
+                                                                            width:
+                                                                                140,
+                                                                            child: ListView.builder(
+                                                                                physics: ClampingScrollPhysics(),
+                                                                                shrinkWrap: true,
+                                                                                scrollDirection: Axis.vertical,
+                                                                                itemCount: trainschedsList.length,
+                                                                                itemBuilder: (context, index) {
+                                                                                  return Column(
                                                                                     children: [
-                                                                                      SizedBox(
-                                                                                        //width: 30,
-                                                                                        child: Text(trainschedsList[index].actTm!),
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          SizedBox(
+                                                                                            //width: 30,
+                                                                                            child: Text(trainschedsList[index].actTm!),
+                                                                                          ),
+                                                                                          SizedBox(
+                                                                                            width: 6,
+                                                                                          ),
+                                                                                          SizedBox(
+                                                                                            width: 70,
+                                                                                            child: Text(trainschedsList[index].station!, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14)),
+                                                                                          ),
+                                                                                        ],
                                                                                       ),
-                                                                                      SizedBox(width: 6,),
                                                                                       SizedBox(
-                                                                                        width: 80,
-                                                                                        child: Text(trainschedsList[index].station!,maxLines: 3,
-                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                            style: TextStyle(fontSize: 14)),
-                                                                                      ),
-                                                                                      
-                                                                                    
+                                                                                        height: 7,
+                                                                                      )
                                                                                     ],
-                                                                                  ),
-                                                                                  SizedBox(height: 7,)
-                                                                                ],
-                                                                              );
-                                                                            }))
-                                                                  ]),
-                                                            );
-                                                          },
-                                                          error: (error,
-                                                                  stackTrace) =>
-                                                              Text(error
-                                                                  .toString()),
-                                                          loading: (() =>
-                                                              const Center(
-                                                                child:
-                                                                    CircularProgressIndicator(),
-                                                              )),
-                                                        ),
-                                                      )
-                                                    ]),
+                                                                                  );
+                                                                                }))
+                                                                      ]),
+                                                                );
+                                                              },
+                                                              error: (error,
+                                                                      stackTrace) =>
+                                                                  Text(error
+                                                                      .toString()),
+                                                              loading: (() =>
+                                                                  const Center(
+                                                                    child:
+                                                                        CircularProgressIndicator(),
+                                                                  )),
+                                                            ),
+                                                          )
+                                                        ]),
                                                   ],
                                                 ),
                                               ],
@@ -470,8 +485,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   static const trainlineBoxColor = Color(0xFF3E68FF);
+  static const trainViewBoxBorderColor = Colors.white;
   static const backgroundColor = Color(0xFFF1F1F1);
-  static const borderLineBox = Color.fromARGB(255, 116, 115, 115);
+  static const iconOutlineColor = Color.fromARGB(255, 116, 115, 115);
 
   BoxDecoration trainlineBox() {
     return BoxDecoration(
