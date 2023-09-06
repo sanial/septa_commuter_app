@@ -17,6 +17,8 @@ import 'package:septa_commuter_app/models/train_schedule/train_schedule.dart';
 import 'package:septa_commuter_app/models/train_view/train_view.dart';
 import 'package:septa_commuter_app/services/services.dart';
 
+import 'package:septa_commuter_app/dimensions.dart';
+
 //Fetch JSON document using http.get() method
 // Future<List<TrainView>> fetchTrainViews(http.Client client) async {
 //   final response =
@@ -132,8 +134,8 @@ class _HomePageState extends State<HomePage> {
                       //mainAxisSize: MainAxisSize.min,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Text('SELECT RAIL LINE: '),
+                          padding: EdgeInsets.all(4),
+                          child: Text('SELECT RAIL LINE: ',textAlign: TextAlign.left,),
                         ),
                         //Trainlines List
                         SizedBox(
@@ -149,53 +151,57 @@ class _HomePageState extends State<HomePage> {
                                 final trainline = _trainlines[index];
                                 //     _trainlines_queue.elementAt(index);
                                 return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    FilterChip(
-                                        side: BorderSide(
-                                            color: trainlineBoxColor,
-                                            strokeAlign: StrokeAlign.center),
-                                        padding: EdgeInsets.all(8),
-                                        backgroundColor: trainlineBoxColor,
-                                        label: Text(
-                                          trainline.line,
-                                          style: TextStyle(
-                                              color: trainline.isSelected
-                                                  ? trainlineBoxColor
-                                                  : Colors.white),
-                                        ),
-                                        selected: trainline.isSelected,
-                                        selectedColor: Colors.white,
-                                        //Color.fromARGB(255, 67, 66, 66), really pretty darkgrey
-                                        checkmarkColor: trainlineBoxColor,
-                                        onSelected: ((bool selected) {
-                                          setState(() {
-                                            trainline.isSelected =
-                                                !trainline.isSelected;
-                                            line.refresh(trainlineProvider);
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 4),
+                                      child: FilterChip(
+                                          side: BorderSide(
+                                              color: trainlineBoxColor,
+                                              strokeAlign: StrokeAlign.center),
+                                          padding: EdgeInsets.all(8),
+                                          backgroundColor: trainlineBoxColor,
+                                          label: Text(
+                                            trainline.line,
+                                            style: TextStyle(
+                                                color: trainline.isSelected
+                                                    ? trainlineBoxColor
+                                                    : Colors.white),
+                                          ),
+                                          selected: trainline.isSelected,
+                                          selectedColor: Colors.white,
+                                          //Color.fromARGB(255, 67, 66, 66), really pretty darkgrey
+                                          checkmarkColor: trainlineBoxColor,
+                                          onSelected: ((bool selected) {
+                                            setState(() {
+                                              trainline.isSelected =
+                                                  !trainline.isSelected;
+                                              line.refresh(trainlineProvider);
 
-                                            //if trainline filterchips selected
-                                            //check if an empty list contains it, and add it to list
-                                            //else if trainline filterchip unselected, remove from list
-                                            if (selected) {
-                                              line.watch(
-                                                  trainlineSelectedProvider);
-                                              line
-                                                      .read(
-                                                          trainlineSelectedProvider
-                                                              .notifier)
-                                                      .state =
-                                                  TrainLineSelected.isSelected;
+                                              //if trainline filterchips selected
+                                              //check if an empty list contains it, and add it to list
+                                              //else if trainline filterchip unselected, remove from list
+                                              if (selected) {
+                                                line.watch(
+                                                    trainlineSelectedProvider);
+                                                line
+                                                        .read(
+                                                            trainlineSelectedProvider
+                                                                .notifier)
+                                                        .state =
+                                                    TrainLineSelected.isSelected;
 
-                                              filteredTrainview
-                                                  .add(trainline.line);
-                                              print(filteredTrainview);
-                                            }
-                                            if (!selected) {
-                                              filteredTrainview
-                                                  .remove(trainline.line);
-                                            }
-                                          });
-                                        })),
+                                                filteredTrainview
+                                                    .add(trainline.line);
+                                                print(filteredTrainview);
+                                              }
+                                              if (!selected) {
+                                                filteredTrainview
+                                                    .remove(trainline.line);
+                                              }
+                                            });
+                                          })),
+                                    ),
                                   ],
                                 );
                               })),
@@ -291,24 +297,6 @@ class _HomePageState extends State<HomePage> {
                                               // alignment: Alignment.bottomCenter,
                                               clipBehavior: Clip.none,
                                               children: [
-                                                //Concentric Circles
-                                                // Positioned(
-                                                //   top: 0,
-                                                //   left: 55,
-                                                //   height: 20,
-                                                //   width: 20,
-                                                //   child: Container(
-                                                //     height: 20,
-                                                //     width: 20,
-                                                //     decoration:
-                                                //         ShapeDecoration(
-                                                //       shape: CircleBorder(),
-                                                //       color: borderLineBox,
-                                                //     ),
-                                                //   ),
-                                                // ),
-
-                                                //BorderLineBox stacks ->trainViewBox stacks
                                                 Stack(
                                                   clipBehavior: Clip.none,
                                                   alignment:
@@ -317,8 +305,8 @@ class _HomePageState extends State<HomePage> {
                                                   children: [
                                                     //BorderLineBox ->trainViewBox
                                                     Container(
-                                                      width: 160,
-                                                      height: 459,
+                                                      width: Dimensions.trainview_box_width,
+                                                      height: Dimensions.trainview_box_height,
                                                       decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         //     borderLineBox, -> trainViewBox
@@ -370,21 +358,24 @@ class _HomePageState extends State<HomePage> {
                                                             ),
                                                           ),
                                                           Container(
-                                                            child: Text('Train No.' +
+                                                            child: Text('Train No. ' +
                                                                 trainviewList[
                                                                         index]
                                                                     .trainno!),
                                                           ),
                                                           Container(
-                                                            child: Text(
+                                                            child: Text('Destination: '+
                                                                 trainviewList[
                                                                         index]
-                                                                    .dest!),
+                                                                    .dest!
+                                                                    ),
                                                           ),
                                                           Container(
-                                                            child: Text(
-                                                                '${trainviewList[index].late!}'),
+                                                            child: (trainviewList[index].late! > 0)? Text('${trainviewList[index].late!}' + ' min late',
+                                                                    style:TextStyle( 
+                                                                      color:(trainviewList[index].late! == 0)? Colors.black : Colors.red, ),): Text(' '),
                                                           ),
+                                                          
                                                           Container(
                                                             child: _train_scheds
                                                                 .when(
@@ -409,13 +400,13 @@ class _HomePageState extends State<HomePage> {
                                                                       children: [
                                                                         SizedBox(
                                                                           height:
-                                                                              10,
+                                                                              Dimensions.trainview_sizedbox_height,
                                                                         ),
                                                                         SizedBox(
                                                                             height:
-                                                                                340,
+                                                                                Dimensions.trainsched_box_height,
                                                                             width:
-                                                                                140,
+                                                                                Dimensions.trainsched_box_width,
                                                                             child: ListView.builder(
                                                                                 physics: ClampingScrollPhysics(),
                                                                                 shrinkWrap: true,
@@ -423,18 +414,34 @@ class _HomePageState extends State<HomePage> {
                                                                                 itemCount: trainschedsList.length,
                                                                                 itemBuilder: (context, index) {
                                                                                   return Column(
+                                                                                    mainAxisAlignment: MainAxisAlignment.center,
                                                                                     children: [
                                                                                       Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
                                                                                         children: [
                                                                                           SizedBox(
                                                                                             //width: 30,
                                                                                             child: Text(trainschedsList[index].actTm!),
                                                                                           ),
-                                                                                          SizedBox(
-                                                                                            width: 6,
+                                                                                          // SizedBox(
+                                                                                          //   width: 6,
+                                                                                          // ),
+                                                                                          Container(
+                                                                                            width: 10,
+                                                                                            height: 10,
+                                                                                            child: Padding(
+                                                                                              padding: EdgeInsets.all(2), // border width
+                                                                                              child: Container( // or ClipRRect if you need to clip the content
+                                                                                                decoration: BoxDecoration(
+                                                                                                  shape: BoxShape.circle,
+                                                                                                  color: Colors.grey, // inner circle color
+                                                                                                ),
+                                                                                                child: Container(), // inner content
+                                                                                              ),
+                                                                                            ),
                                                                                           ),
                                                                                           SizedBox(
-                                                                                            width: 70,
+                                                                                            width: 81,
                                                                                             child: Text(trainschedsList[index].station!, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14)),
                                                                                           ),
                                                                                         ],
@@ -503,6 +510,7 @@ class _HomePageState extends State<HomePage> {
           ),
     );
   }
+
 
   List<String> buildItemsbyFilter(bool isStation) {
     if (isStation) {
