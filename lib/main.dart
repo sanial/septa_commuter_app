@@ -7,6 +7,7 @@ import 'dart:ui';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:timelines/timelines.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,7 @@ class _HomePageState extends State<HomePage> {
           title: Text(
             'SEPTA Regional Rail',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: Dimensions.appbar_font,
               fontFamily: 'Raleway',
               fontWeight: FontWeight.bold,
             ),
@@ -135,7 +136,10 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Padding(
                           padding: EdgeInsets.all(4),
-                          child: Text('SELECT RAIL LINE: ',textAlign: TextAlign.left,),
+                          child: Text(
+                            'SELECT RAIL LINE: ',
+                            textAlign: TextAlign.left,
+                          ),
                         ),
                         //Trainlines List
                         SizedBox(
@@ -189,7 +193,8 @@ class _HomePageState extends State<HomePage> {
                                                             trainlineSelectedProvider
                                                                 .notifier)
                                                         .state =
-                                                    TrainLineSelected.isSelected;
+                                                    TrainLineSelected
+                                                        .isSelected;
 
                                                 filteredTrainview
                                                     .add(trainline.line);
@@ -305,8 +310,10 @@ class _HomePageState extends State<HomePage> {
                                                   children: [
                                                     //BorderLineBox ->trainViewBox
                                                     Container(
-                                                      width: Dimensions.trainview_box_width,
-                                                      height: Dimensions.trainview_box_height,
+                                                      width: Dimensions
+                                                          .trainview_box_width,
+                                                      height: Dimensions
+                                                          .trainview_box_height,
                                                       decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         //     borderLineBox, -> trainViewBox
@@ -349,7 +356,9 @@ class _HomePageState extends State<HomePage> {
                                                               //filteredTrainview.isNotEmpty? if(filteredTrainview.contains(trainviewList[index].line!))){Text(trainviewList[index].line!)}: Text(trainviewList[index].line!),
 
                                                               style: TextStyle(
-                                                                  fontSize: 12,
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .trainline_boxchip_font,
                                                                   color:
                                                                       trainlineBoxColor,
                                                                   fontWeight:
@@ -358,24 +367,49 @@ class _HomePageState extends State<HomePage> {
                                                             ),
                                                           ),
                                                           Container(
-                                                            child: Text('Train No. ' +
-                                                                trainviewList[
-                                                                        index]
-                                                                    .trainno!),
+                                                            child: Text(
+                                                              '#' +
+                                                                  trainviewList[
+                                                                          index]
+                                                                      .trainno!,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .trainsched_font),
+                                                            ),
                                                           ),
                                                           Container(
-                                                            child: Text('Destination: '+
-                                                                trainviewList[
-                                                                        index]
-                                                                    .dest!
+                                                            child: Text(
+                                                              'TO: ' +
+                                                                  trainviewList[
+                                                                          index]
+                                                                      .dest!,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .trainsched_font),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: (trainviewList[
+                                                                            index]
+                                                                        .late! >
+                                                                    0)
+                                                                ? Text(
+                                                                    '${trainviewList[index].late!}' +
+                                                                        ' min late',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: (trainviewList[index].late! ==
+                                                                              0)
+                                                                          ? Colors
+                                                                              .black
+                                                                          : impactColor,
                                                                     ),
+                                                                  )
+                                                                : Text(' '),
                                                           ),
-                                                          Container(
-                                                            child: (trainviewList[index].late! > 0)? Text('${trainviewList[index].late!}' + ' min late',
-                                                                    style:TextStyle( 
-                                                                      color:(trainviewList[index].late! == 0)? Colors.black : Colors.red, ),): Text(' '),
-                                                          ),
-                                                          
+
                                                           Container(
                                                             child: _train_scheds
                                                                 .when(
@@ -403,10 +437,10 @@ class _HomePageState extends State<HomePage> {
                                                                               Dimensions.trainview_sizedbox_height,
                                                                         ),
                                                                         SizedBox(
+                                                                            //TODO
                                                                             height:
                                                                                 Dimensions.trainsched_box_height,
-                                                                            width:
-                                                                                Dimensions.trainsched_box_width,
+                                                                            width: Dimensions.trainsched_box_width,
                                                                             child: ListView.builder(
                                                                                 physics: ClampingScrollPhysics(),
                                                                                 shrinkWrap: true,
@@ -421,28 +455,31 @@ class _HomePageState extends State<HomePage> {
                                                                                         children: [
                                                                                           SizedBox(
                                                                                             //width: 30,
-                                                                                            child: Text(trainschedsList[index].actTm!),
+                                                                                            child: (trainschedsList[index].actTm! == 'na') ? Text('') : Text(trainschedsList[index].actTm!),
                                                                                           ),
                                                                                           // SizedBox(
                                                                                           //   width: 6,
                                                                                           // ),
-                                                                                          Container(
-                                                                                            width: 10,
-                                                                                            height: 10,
-                                                                                            child: Padding(
-                                                                                              padding: EdgeInsets.all(2), // border width
-                                                                                              child: Container( // or ClipRRect if you need to clip the content
-                                                                                                decoration: BoxDecoration(
-                                                                                                  shape: BoxShape.circle,
-                                                                                                  color: Colors.grey, // inner circle color
+                                                                                          (trainschedsList[index].actTm! == 'na')
+                                                                                              ? Text('')
+                                                                                              : Container(
+                                                                                                  width: Dimensions.trainsched_circle_radius,
+                                                                                                  height: Dimensions.trainsched_circle_radius,
+                                                                                                  child: Padding(
+                                                                                                    padding: EdgeInsets.all(2), // border width
+                                                                                                    child: Container(
+                                                                                                      // or ClipRRect if you need to clip the content
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        shape: BoxShape.circle,
+                                                                                                        color: Colors.grey, // inner circle color
+                                                                                                      ),
+                                                                                                      child: Container(), // inner content
+                                                                                                    ),
+                                                                                                  ),
                                                                                                 ),
-                                                                                                child: Container(), // inner content
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
                                                                                           SizedBox(
                                                                                             width: 81,
-                                                                                            child: Text(trainschedsList[index].station!, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14)),
+                                                                                            child: (trainschedsList[index].actTm! == 'na') ? Text('') : Text(trainschedsList[index].station!, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: Dimensions.trainsched_font)),
                                                                                           ),
                                                                                         ],
                                                                                       ),
@@ -491,10 +528,12 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  static const trainlineBoxColor = Color(0xFF3E68FF);
+  static const trainlineBoxColor = Color(0xFF3292D1); //Curious Blue (old: 3E68FF)
   static const trainViewBoxBorderColor = Colors.white;
-  static const backgroundColor = Color(0xFFF1F1F1);
+  static const backgroundColor = Color(0xFFEEF1F6); //Catskill White
   static const iconOutlineColor = Color.fromARGB(255, 116, 115, 115);
+  static const impactColor = Color(0xFFC44141); //Mojo
+  static const accentColor = Color(0xFFD3C62E); //Old Gold
 
   BoxDecoration trainlineBox() {
     return BoxDecoration(
@@ -510,7 +549,6 @@ class _HomePageState extends State<HomePage> {
           ),
     );
   }
-
 
   List<String> buildItemsbyFilter(bool isStation) {
     if (isStation) {
